@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/xShifter/ShifterInit.unity
+    guid: 12a6a090ebf3f6e428e154aec5a8ec5d
+  - enabled: 1
+    path: Assets/xShifter/ShifterScene1.unity
+    guid: 7e600656124604767ba1aa932dbf56ff
   m_configObjects: {}

@@ -39,10 +39,23 @@ public class InitMgr : MonoBehaviour
         //{
         //    b.onClick.AddListener(RestartLevel);
         //}
-        nextLevelBtn.onClick.AddListener(playNextLevel);
-        noThanksBtn.onClick.AddListener(RestartLevel);
-        rewardBackBtn.onClick.AddListener(rewardBack);
-        retryBtn.onClick.AddListener(rewardBackToLast);
+        foreach (var n in nextLevelBtn)
+        {
+            n.onClick.AddListener(playNextLevel);
+        }
+
+        foreach (var n in noThanksBtn)
+        {
+            n.onClick.AddListener(RestartLevel);
+        }
+        if (rewardBackBtn != null)
+        {
+            rewardBackBtn.onClick.AddListener(rewardBack);
+        }
+        if (retryBtn != null)
+        {
+            retryBtn.onClick.AddListener(rewardBackToLast);
+        }
         DisableAllUI();
     }
 
@@ -176,8 +189,8 @@ public class InitMgr : MonoBehaviour
         return curLevelIndex;
     }
 
-    public Button nextLevelBtn;
-    public Button noThanksBtn;
+    public Button[] nextLevelBtn;
+    public Button[] noThanksBtn;
     public Button rewardBackBtn;
     public Button retryBtn;
 
