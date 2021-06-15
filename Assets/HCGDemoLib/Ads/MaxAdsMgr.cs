@@ -16,14 +16,20 @@ public class MaxAdsMgr :MonoBehaviour
     public void InitializeInterstitialAds()
     {
         // Attach callback
-        MaxSdkCallbacks.OnInterstitialLoadedEvent += OnInterstitialLoadedEvent;
-        MaxSdkCallbacks.OnInterstitialLoadFailedEvent += OnInterstitialFailedEvent;
-        MaxSdkCallbacks.OnInterstitialAdFailedToDisplayEvent += InterstitialFailedToDisplayEvent;
-        MaxSdkCallbacks.OnInterstitialHiddenEvent += OnInterstitialDismissedEvent;
+        //MaxSdkCallbacks.OnInterstitialLoadedEvent += OnInterstitialLoadedEvent;
+        //MaxSdkCallbacks.OnInterstitialLoadFailedEvent += OnInterstitialFailedEvent;
+        //MaxSdkCallbacks.OnInterstitialAdFailedToDisplayEvent += InterstitialFailedToDisplayEvent;
+        //MaxSdkCallbacks.OnInterstitialHiddenEvent += OnInterstitialDismissedEvent;
+
+        MaxSdkCallbacks.Interstitial.OnAdLoadedEvent += OnInterstitialLoadedEvent;
+        MaxSdkCallbacks.Interstitial.OnAdLoadFailedEvent+= OnInterstitialFailedEvent;
+        MaxSdkCallbacks.Interstitial.OnAdDisplayFailedEvent+= InterstitialFailedToDisplayEvent;
+        MaxSdkCallbacks.Interstitial.OnAdHiddenEvent+= OnInterstitialDismissedEvent;
 
         // Load the first interstitial
         LoadInterstitial();
     }
+
 
     private void LoadInterstitial()
     {
@@ -31,7 +37,7 @@ public class MaxAdsMgr :MonoBehaviour
         MaxSdk.LoadInterstitial(interAdsID);
     }
 
-    private void OnInterstitialLoadedEvent(string adUnitId)
+    private void OnInterstitialLoadedEvent(string adUnitId ,MaxSdkBase.AdInfo arg2)
     {
         // Interstitial ad is ready to be shown. MaxSdk.IsInterstitialReady(adUnitId) will now return 'true'
         // Reset retry attempt
@@ -39,8 +45,9 @@ public class MaxAdsMgr :MonoBehaviour
         interRetray = 0;
     }
 
-    private void OnInterstitialFailedEvent(string adUnitId, int errorCode)
+    private void OnInterstitialFailedEvent(string adUnitId, MaxSdkBase.ErrorInfo err)
     {
+        var errorCode = err.Message;
         print("[AppLovin Max] OnInterAdFailed errorCode  " + errorCode);
         // Interstitial ad failed to load 
         // We recommend retrying with exponentially higher delays up to a maximum delay (in this case 64 seconds)
@@ -52,14 +59,15 @@ public class MaxAdsMgr :MonoBehaviour
         Invoke("LoadInterstitial", (float)retryDelay);
     }
 
-    private void InterstitialFailedToDisplayEvent(string adUnitId, int errorCode)
+    private void InterstitialFailedToDisplayEvent(string adUnitId, MaxSdkBase.ErrorInfo err, MaxSdkBase.AdInfo adInfo)
     {
+        var errorCode = err.Message;
         // Interstitial ad failed to display. We recommend loading the next ad
         AnalyzeMgr.current.OnInterFailedShow(AdsFrom.Max, errorCode.ToString());
         LoadInterstitial();
     }
 
-    private void OnInterstitialDismissedEvent(string adUnitId)
+    private void OnInterstitialDismissedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
     {
         // Interstitial ad is hidden. Pre-load the next ad
         AnalyzeMgr.current.OnInterClosed(AdsFrom.Max);
@@ -92,16 +100,37 @@ public class MaxAdsMgr :MonoBehaviour
     public void InitializeRewardedAds()
     {
         // Attach callback
-        MaxSdkCallbacks.OnRewardedAdLoadedEvent += OnRewardedAdLoadedEvent;
-        MaxSdkCallbacks.OnRewardedAdLoadFailedEvent += OnRewardedAdFailedEvent;
-        MaxSdkCallbacks.OnRewardedAdFailedToDisplayEvent += OnRewardedAdFailedToDisplayEvent;
-        MaxSdkCallbacks.OnRewardedAdDisplayedEvent += OnRewardedAdDisplayedEvent;
-        MaxSdkCallbacks.OnRewardedAdClickedEvent += OnRewardedAdClickedEvent;
-        MaxSdkCallbacks.OnRewardedAdHiddenEvent += OnRewardedAdDismissedEvent;
-        MaxSdkCallbacks.OnRewardedAdReceivedRewardEvent += OnRewardedAdReceivedRewardEvent;
+        //MaxSdkCallbacks.OnRewardedAdLoadedEvent += OnRewardedAdLoadedEvent;
+        //MaxSdkCallbacks.OnRewardedAdLoadFailedEvent += OnRewardedAdFailedEvent;
+        //MaxSdkCallbacks.OnRewardedAdFailedToDisplayEvent += OnRewardedAdFailedToDisplayEvent;
+        //MaxSdkCallbacks.OnRewardedAdDisplayedEvent += OnRewardedAdDisplayedEvent;
+        //MaxSdkCallbacks.OnRewardedAdClickedEvent += OnRewardedAdClickedEvent;
+        //MaxSdkCallbacks.OnRewardedAdHiddenEvent += OnRewardedAdDismissedEvent;
+        //MaxSdkCallbacks.OnRewardedAdReceivedRewardEvent += OnRewardedAdReceivedRewardEvent;
+
+        MaxSdkCallbacks.Rewarded.OnAdLoadedEvent += OnRewardedAdLoadedEvent;
+        MaxSdkCallbacks.Rewarded.OnAdLoadFailedEvent += OnRewardedAdLoadFailedEvent;
+        MaxSdkCallbacks.Rewarded.OnAdDisplayedEvent += OnRewardedAdDisplayedEvent;
+        MaxSdkCallbacks.Rewarded.OnAdClickedEvent += OnRewardedAdClickedEvent;
+        MaxSdkCallbacks.Rewarded.OnAdRevenuePaidEvent += OnRewardedAdRevenuePaidEvent;
+        MaxSdkCallbacks.Rewarded.OnAdHiddenEvent += OnRewardedAdHiddenEvent;
+        MaxSdkCallbacks.Rewarded.OnAdDisplayFailedEvent += OnRewardedAdFailedToDisplayEvent;
+        MaxSdkCallbacks.Rewarded.OnAdReceivedRewardEvent += OnRewardedAdReceivedRewardEvent;
 
         // Load the first rewarded ad
         LoadRewardedAd();
+    }
+
+    private void OnRewardedAdRevenuePaidEvent(string arg1, MaxSdkBase.AdInfo arg2)
+    {
+    }
+
+    private void OnRewardedAdLoadFailedEvent(string arg1, MaxSdkBase.ErrorInfo arg2)
+    {
+        rewardAttemp++;
+        double retryDelay = Math.Pow(2, Math.Min(6, rewardAttemp));
+        AnalyzeMgr.current.OnRewardFailedLoad(AdsFrom.Max,arg2.ToString());
+        Invoke("LoadRewardedAd", (float)retryDelay);
     }
 
     private void LoadRewardedAd()
@@ -110,7 +139,7 @@ public class MaxAdsMgr :MonoBehaviour
         MaxSdk.LoadRewardedAd(rewardAdsID);
     }
 
-    private void OnRewardedAdLoadedEvent(string adUnitId)
+    private void OnRewardedAdLoadedEvent(string adUnitId,MaxSdkBase.AdInfo adInfo)
     {
         AnalyzeMgr.current.OnRewardLoaded(AdsFrom.Max);
         // Rewarded ad is ready to be shown. MaxSdk.IsRewardedAdReady(adUnitId) will now return 'true'
@@ -132,30 +161,30 @@ public class MaxAdsMgr :MonoBehaviour
         Invoke("LoadRewardedAd", (float)retryDelay);
     }
 
-    private void OnRewardedAdFailedToDisplayEvent(string adUnitId, int errorCode)
+    private void OnRewardedAdFailedToDisplayEvent(string adUnitId, MaxSdkBase.ErrorInfo errorCode, MaxSdkBase.AdInfo adInfo)
     {
         AnalyzeMgr.current.OnRewardFailedShow(AdsFrom.Max, errorCode.ToString());
         // Rewarded ad failed to display. We recommend loading the next ad
         LoadRewardedAd();
     }
 
-    private void OnRewardedAdDisplayedEvent(string adUnitId) {
+    private void OnRewardedAdDisplayedEvent(string adUnitId,MaxSdkBase.AdInfo adInfo) {
         AnalyzeMgr.current.OnRewardShowed(AdsFrom.Max);
     }
 
-    private void OnRewardedAdClickedEvent(string adUnitId) { 
+    private void OnRewardedAdClickedEvent(string adUnitId,MaxSdkBase.AdInfo adInfo) { 
     
         AnalyzeMgr.current.OnRewardClicked(AdsFrom.Max);
     }
 
-    private void OnRewardedAdDismissedEvent(string adUnitId)
+    private void OnRewardedAdHiddenEvent(string adUnitId,MaxSdkBase.AdInfo adInfo)
     {
         // Rewarded ad is hidden. Pre-load the next ad
         AnalyzeMgr.current.OnRewardSkiped(AdsFrom.Max);
         LoadRewardedAd();
     }
 
-    private void OnRewardedAdReceivedRewardEvent(string adUnitId, MaxSdk.Reward reward)
+    private void OnRewardedAdReceivedRewardEvent(string adUnitId, MaxSdk.Reward reward,MaxSdkBase.AdInfo adInfo)
     {
         AnalyzeMgr.current.OnRewardFinished(AdsFrom.Max);
         // Rewarded ad was displayed and user should receive the reward

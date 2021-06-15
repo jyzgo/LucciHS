@@ -101,6 +101,8 @@ public class AnalyzeMgr : MonoBehaviour
         //GA.ProfileSignIn(_deviceUid);
         //ThinkingAnalyticsAPI.EnableTracking(false);
         AdjustLiveOn.current.InitAdjust();
+        OnInstall();
+        OnGameStart();
     }
 
     const string WHICH_LEVEL_LOSE = "which_level_lose";

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AppLovinSettings
   m_EditorClassIdentifier: 
   qualityServiceEnabled: 1
-  sdkKey: 
+  sdkKey: k2upCW6APxH-_BKb4-RhCFa5P-7DIvcU69czdb45Hv2v4FTV1viTw7mAV6P6-SMgAkcDyAA47sola-hn6TACWa
   consentFlowEnabled: 0
   consentFlowPrivacyPolicyUrl: 
   consentFlowTermsOfServiceUrl: 
