@@ -5,6 +5,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -62,7 +63,7 @@ public class MaxSdkUnityEditor : MaxSdkBase
     /// OPTIONAL: Set the MAX ad unit ids to be used for this instance of the SDK. 3rd-party SDKs will be initialized with the credentials configured for these ad unit ids.
     /// This should only be used if you have different sets of ad unit ids / credentials for the same package name.</param>
     /// </summary>
-    public static void InitializeSdk(String[] adUnitIds = null)
+    public static void InitializeSdk(string[] adUnitIds = null)
     {
         _ensureHaveSdkKey();
 
@@ -153,16 +154,6 @@ public class MaxSdkUnityEditor : MaxSdkBase
     }
 
     /// <summary>
-    /// Returns information about the last loaded ad for the given ad unit identifier. Returns null if no ad is loaded.
-    /// </summary>
-    /// <param name="adUnitIdentifier">Ad unit identifier of an ad</param>
-    /// <returns>Information about the ad, or null if no ad is loaded.</returns>
-    public static MaxSdkBase.AdInfo GetAdInfo(string adUnitIdentifier)
-    {
-        return new MaxSdkBase.AdInfo("");
-    }
-
-    /// <summary>
     /// Returns the arbitrary ad value for a given ad unit identifier with key. Returns null if no ad is loaded.
     /// </summary>
     /// <param name="adUnitIdentifier"></param>
@@ -178,13 +169,20 @@ public class MaxSdkUnityEditor : MaxSdkBase
     #region Privacy
 
     /// <summary>
-    /// Get the consent dialog state for this user. If no such determination could be made, <see cref="MaxSdkBase.ConsentDialogState.Unknown"/> will be returned.
+    /// Get the SDK configuration for this user.
     ///
-    /// Note: this method should be called only after SDK has been initialized
+    /// Note: This method should be called only after SDK has been initialized.
     /// </summary>
-    public static ConsentDialogState GetConsentDialogState()
+    public static SdkConfiguration GetSdkConfiguration()
     {
-        return ConsentDialogState.Unknown;
+        var sdkConfiguration = new SdkConfiguration();
+        sdkConfiguration.ConsentDialogState = ConsentDialogState.Unknown;
+#if UNITY_EDITOR
+        sdkConfiguration.AppTrackingStatus = AppTrackingStatus.Authorized;
+#endif
+        sdkConfiguration.CountryCode = RegionInfo.CurrentRegion.TwoLetterISORegionName;
+
+        return sdkConfiguration;
     }
 
     /// <summary>
@@ -542,7 +540,7 @@ public class MaxSdkUnityEditor : MaxSdkBase
     {
         ValidateAdUnitIdentifier(adUnitIdentifier, "set MREC extra parameter");
     }
-    
+
     /// <summary>
     /// The MREC position on the screen. When setting the MREC position via <see cref="CreateMRec(string, float, float)"/> or <see cref="UpdateMRecPosition(string, float, float)"/>,
     /// the MREC is placed within the safe area of the screen. This returns the absolute position of the MREC on screen.
@@ -556,7 +554,7 @@ public class MaxSdkUnityEditor : MaxSdkBase
     }
 
     #endregion
-    
+
     #region Cross Promo Ads
 
     /// <summary>
@@ -734,6 +732,7 @@ public class MaxSdkUnityEditor : MaxSdkBase
         var stubInterstitial = Object.Instantiate(interstitialPrefab, Vector3.zero, Quaternion.identity);
         var interstitialText = GameObject.Find("MaxInterstitialTitle").GetComponent<Text>();
         var closeButton = GameObject.Find("MaxInterstitialCloseButton").GetComponent<Button>();
+        Object.DontDestroyOnLoad(stubInterstitial);
 
         interstitialText.text += ":\n" + adUnitIdentifier;
         closeButton.onClick.AddListener(() =>
@@ -846,6 +845,7 @@ public class MaxSdkUnityEditor : MaxSdkBase
         var rewardStatus = GameObject.Find("MaxRewardStatus").GetComponent<Text>();
         var closeButton = GameObject.Find("MaxRewardedCloseButton").GetComponent<Button>();
         var rewardButton = GameObject.Find("MaxRewardButton").GetComponent<Button>();
+        Object.DontDestroyOnLoad(stubRewardedAd);
 
         rewardedTitle.text += ":\n" + adUnitIdentifier;
         closeButton.onClick.AddListener(() =>
@@ -968,6 +968,7 @@ public class MaxSdkUnityEditor : MaxSdkBase
         var rewardStatus = GameObject.Find("MaxRewardStatus").GetComponent<Text>();
         var closeButton = GameObject.Find("MaxRewardedCloseButton").GetComponent<Button>();
         var rewardButton = GameObject.Find("MaxRewardButton").GetComponent<Button>();
+        Object.DontDestroyOnLoad(stubRewardedAd);
 
         rewardedTitle.text = "MAX Rewarded Interstitial Ad:\n" + adUnitIdentifier;
         closeButton.onClick.AddListener(() =>
@@ -1145,6 +1146,22 @@ public class MaxSdkUnityEditor : MaxSdkBase
     }
 
     internal static void SetUserSegmentField(string key, string value) { }
+
+    #endregion
+
+    #region Obsolete
+
+    [Obsolete("This method has been deprecated. Please use `GetSdkConfiguration().ConsentDialogState`")]
+    public static ConsentDialogState GetConsentDialogState()
+    {
+        return ConsentDialogState.Unknown;
+    }
+
+    [Obsolete("This method has been deprecated. The AdInfo object is returned with ad callbacks.")]
+    public static AdInfo GetAdInfo(string adUnitIdentifier)
+    {
+        return new AdInfo(new Dictionary<string, string>());
+    }
 
     #endregion
 }

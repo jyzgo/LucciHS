@@ -70,6 +70,12 @@ namespace AppLovinMax.Scripts.Editor
             "MoPub"
         };
 
+        private static readonly List<string> EmbedSwiftStandardLibrariesNetworks = new List<string>
+        {
+            "Facebook",
+            "MoPub"
+        };
+
         private static string PluginMediationDirectory
         {
             get
@@ -102,8 +108,10 @@ namespace AppLovinMax.Scripts.Editor
             LocalizeUserTrackingDescriptionIfNeeded(AppLovinSettings.Instance.UserTrackingUsageDescriptionJa, "ja", buildPath, project, unityMainTargetGuid);
             LocalizeUserTrackingDescriptionIfNeeded(AppLovinSettings.Instance.UserTrackingUsageDescriptionKo, "ko", buildPath, project, unityMainTargetGuid);
             LocalizeUserTrackingDescriptionIfNeeded(AppLovinSettings.Instance.UserTrackingUsageDescriptionZhHans, "zh-Hans", buildPath, project, unityMainTargetGuid);
+            LocalizeUserTrackingDescriptionIfNeeded(AppLovinSettings.Instance.UserTrackingUsageDescriptionZhHant, "zh-Hant", buildPath, project, unityMainTargetGuid);
 
             AddSwiftSupportIfNeeded(buildPath, project, unityFrameworkTargetGuid);
+            EmbedSwiftStandardLibrariesIfNeeded(buildPath, project, unityMainTargetGuid);
 
             project.WriteToFile(projectPath);
         }
@@ -246,8 +254,22 @@ namespace AppLovinMax.Scripts.Editor
 
             // Add Swift build properties
             project.AddBuildProperty(targetGuid, "SWIFT_VERSION", "5");
-            project.AddBuildProperty(targetGuid, "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES", "YES");
             project.AddBuildProperty(targetGuid, "CLANG_ENABLE_MODULES", "YES");
+        }
+
+        /// <summary>
+        /// For Swift 5+ code that uses the standard libraries, the Swift Standard Libraries MUST be embedded for iOS < 12.2
+        /// Swift 5 introduced ABI stability, which allowed iOS to start bundling the standard libraries in the OS starting with iOS 12.2
+        /// Issue Reference: https://github.com/facebook/facebook-sdk-for-unity/issues/506
+        /// </summary>
+        private static void EmbedSwiftStandardLibrariesIfNeeded(string buildPath, PBXProject project, string mainTargetGuid)
+        {
+            var maxMediationDirectory = PluginMediationDirectory;
+            var hasEmbedSwiftStandardLibrariesNetworksInProject = EmbedSwiftStandardLibrariesNetworks.Any(network => Directory.Exists(Path.Combine(maxMediationDirectory, network)));
+            if (!hasEmbedSwiftStandardLibrariesNetworksInProject) return;
+
+            // This needs to be added the main target. App Store may reject builds if added to UnityFramework (i.e. MoPub in FT).
+            project.AddBuildProperty(mainTargetGuid, "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES", "YES");
         }
 
         private static void CreateSwiftFile(string swiftFilePath)
@@ -307,27 +329,25 @@ namespace AppLovinMax.Scripts.Editor
             if (!consentFlowEnabled) return;
 
             var userTrackingUsageDescription = AppLovinSettings.Instance.UserTrackingUsageDescriptionEn;
-            var termsOfServiceUrl = AppLovinSettings.Instance.ConsentFlowTermsOfServiceUrl;
             var privacyPolicyUrl = AppLovinSettings.Instance.ConsentFlowPrivacyPolicyUrl;
-            if (string.IsNullOrEmpty(userTrackingUsageDescription) || string.IsNullOrEmpty(termsOfServiceUrl) || string.IsNullOrEmpty(privacyPolicyUrl))
+            if (string.IsNullOrEmpty(userTrackingUsageDescription) || string.IsNullOrEmpty(privacyPolicyUrl))
             {
-                AppLovinIntegrationManager.ShowBuildFailureDialog("You cannot use the AppLovin SDK's consent flow without defining a Terms of Service URL, a Privacy Policy URL and the `User Tracking Usage Description` in the AppLovin Integration Manager. \n\n" +
-                                                                  "All 3 values must be included to enable the SDK's consent flow.");
+                AppLovinIntegrationManager.ShowBuildFailureDialog("You cannot use the AppLovin SDK's consent flow without defining a Privacy Policy URL and the `User Tracking Usage Description` in the AppLovin Integration Manager. \n\n" +
+                                                                  "Both values must be included to enable the SDK's consent flow.");
 
                 // No need to update the info.plist here. Default consent flow state will be determined on the SDK side.
                 return;
             }
 
-            // We need to remove the backticks from the default user tracking usage description when adding it to the info.plist. The backticks are only required when adding to InfoPlist.strings.  
-            if (AppLovinSettings.DefaultUserTrackingDescriptionEn.Equals(userTrackingUsageDescription))
-            {
-                userTrackingUsageDescription = userTrackingUsageDescription.Replace("\\", "");
-            }
-
             var consentFlowInfoRoot = plist.root.CreateDict("AppLovinConsentFlowInfo");
             consentFlowInfoRoot.SetBoolean("AppLovinConsentFlowEnabled", consentFlowEnabled);
-            consentFlowInfoRoot.SetString("AppLovinConsentFlowTermsOfService", termsOfServiceUrl);
             consentFlowInfoRoot.SetString("AppLovinConsentFlowPrivacyPolicy", privacyPolicyUrl);
+
+            var termsOfServiceUrl = AppLovinSettings.Instance.ConsentFlowTermsOfServiceUrl;
+            if (!string.IsNullOrEmpty(termsOfServiceUrl))
+            {
+                consentFlowInfoRoot.SetString("AppLovinConsentFlowTermsOfService", termsOfServiceUrl);
+            }
 
             plist.root.SetString("NSUserTrackingUsageDescription", userTrackingUsageDescription);
         }

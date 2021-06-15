@@ -15,8 +15,8 @@ MonoBehaviour:
   qualityServiceEnabled: 1
   sdkKey: 
   consentFlowEnabled: 0
-  consentFlowTermsOfServiceUrl: 
   consentFlowPrivacyPolicyUrl: 
+  consentFlowTermsOfServiceUrl: 
   userTrackingUsageDescriptionEn: 
   userTrackingUsageLocalizationEnabled: 0
   userTrackingUsageDescriptionDe: 
@@ -25,5 +25,6 @@ MonoBehaviour:
   userTrackingUsageDescriptionJa: 
   userTrackingUsageDescriptionKo: 
   userTrackingUsageDescriptionZhHans: 
-  adMobAndroidAppId: 
+  userTrackingUsageDescriptionZhHant: 
+  adMobAndroidAppId: ca-app-pub-8119085811134312~5302542692
   adMobIosAppId: 
