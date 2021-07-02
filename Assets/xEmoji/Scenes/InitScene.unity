@@ -2026,11 +2026,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4610506602399172824, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 509.1169
       objectReference: {fileID: 0}
     - target: {fileID: 4610506602399172824, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -336.13333
       objectReference: {fileID: 0}
     - target: {fileID: 4610506602399172824, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_SizeDelta.x
@@ -2046,7 +2046,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4610506602399172824, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4610506602399172824, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_AnchorMax.x
@@ -2054,7 +2054,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4610506602399172824, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4610506602399172824, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_Pivot.x
@@ -2067,6 +2067,10 @@ PrefabInstance:
     - target: {fileID: 4610506602399172839, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_Name
       value: sentencePrefab (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4610506602399172839, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
@@ -2666,7 +2670,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 10
     m_Bottom: 0
-  m_ChildAlignment: 1
+  m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -3072,11 +3076,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4610506602399172824, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 509.1169
       objectReference: {fileID: 0}
     - target: {fileID: 4610506602399172824, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -198.06667
       objectReference: {fileID: 0}
     - target: {fileID: 4610506602399172824, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_SizeDelta.x
@@ -3092,7 +3096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4610506602399172824, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4610506602399172824, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_AnchorMax.x
@@ -3100,7 +3104,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4610506602399172824, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4610506602399172824, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_Pivot.x
@@ -3113,6 +3117,10 @@ PrefabInstance:
     - target: {fileID: 4610506602399172839, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
       propertyPath: m_Name
       value: sentencePrefab (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4610506602399172839, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc09c048be2387a4b92bf32bccd5e40f, type: 3}
@@ -5059,8 +5067,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MAX_LEVEL_INDEX: 6
   levelText: {fileID: 933147690}
-  linesPanel: {fileID: 0}
-  emojiPanel: {fileID: 0}
+  linesPanel: {fileID: 1526829793}
+  emojiPanel: {fileID: 150430623}
+  selectPanel: {fileID: 1850629439}
   winRoot: {fileID: 3909758511539031944}
   loseRoot: {fileID: 3909758512404766578}
   playRoot: {fileID: 1998878595}

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using MonsterLove.StateMachine;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,12 @@ public enum InitGameState
     Playing,
     Win,
     Lose
+}
+
+public class SentenceData
+{
+    public List<string> wordsList = new List<string>();
+    public string Sentence = "";
 }
 
 public class InitMgr : MonoBehaviour
@@ -75,9 +82,38 @@ public class InitMgr : MonoBehaviour
         _fsm = StateMachine<InitGameState>.Initialize(this, InitGameState.Ready);
     }
 
+    List<SentenceData> _datas = new List<SentenceData>();
     void Ready_Enter()
     {
         print("Ready Game Ready");
+        ClearAllBoard();
+        _datas.Clear();
+        LoadConf();
+    }
+
+    void LoadConf()
+    {
+        print("load conf");
+        _lvConf = PareseObj(gameConfEnumsFileEnum.levelConf);
+    }
+
+    JObject _lvConf;
+    public static JObject PareseObj(gameConfEnumsFileEnum curEnum)
+    {
+        var fileName = curEnum.ToString();
+        TextAsset lvCostData = Resources.Load<TextAsset>("Config/" + fileName);
+        var jObj = JObject.Parse(lvCostData.text);
+        return jObj;
+    }
+
+    void TestAdd()
+    {
+        var d = new SentenceData();
+        d.wordsList.Add("cat");
+        d.wordsList.Add("fart");
+        d.wordsList.Add("v");
+        d.wordsList.Add("puke");
+        d.Sentence = "My cat farted so violently I puked.";
     }
 
 
@@ -169,6 +205,11 @@ public class InitMgr : MonoBehaviour
         }
 
         foreach(Transform e in emojiPanel)
+        {
+            e.gameObject.SetActive(false);
+        }
+
+        foreach(Transform e in selectPanel)
         {
             e.gameObject.SetActive(false);
         }
