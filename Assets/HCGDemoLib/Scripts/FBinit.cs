@@ -34,7 +34,7 @@ public class FBinit : MonoBehaviour
             FB.ActivateApp();
             // Continue with Facebook SDK
             print("fb active finished");
-            FB.LogAppEvent(Application.identifier +" Init ");
+            //FB.LogAppEvent(Application.identifier +" Init ");
         }
         else
         {
