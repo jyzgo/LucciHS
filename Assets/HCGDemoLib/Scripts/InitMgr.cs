@@ -1,7 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using MonsterLove.StateMachine;
 using UnityEngine;
 using UnityEngine.UI;
+
+public enum InitGameState
+{
+    Ready,
+    Playing,
+    Win,
+    Lose
+}
 
 public class InitMgr : MonoBehaviour
 {
@@ -19,8 +28,7 @@ public class InitMgr : MonoBehaviour
             if (_current == null)
             {
                 var init = Resources.Load("InitMgr");
-                var gb = Instantiate(init) as GameObject;
-                _current = gb.GetComponent<InitMgr>();
+                var gb = Instantiate(init);
             }
             return _current;
         }
@@ -34,11 +42,13 @@ public class InitMgr : MonoBehaviour
 
     private void Awake()
     {
+        if(_current != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        _current = this;
         DontDestroyOnLoad(gameObject);
-        //foreach(var b in resetBtns)
-        //{
-        //    b.onClick.AddListener(RestartLevel);
-        //}
         foreach (var n in nextLevelBtn)
         {
             n.onClick.AddListener(playNextLevel);
@@ -58,6 +68,18 @@ public class InitMgr : MonoBehaviour
         }
         DisableAllUI();
     }
+
+    StateMachine<InitGameState> _fsm;
+    private void Start()
+    {
+        _fsm = StateMachine<InitGameState>.Initialize(this, InitGameState.Ready);
+    }
+
+    void Ready_Enter()
+    {
+        print("Ready Game Ready");
+    }
+
 
     private void rewardBack()
     {
@@ -115,25 +137,41 @@ public class InitMgr : MonoBehaviour
 
     public int MAX_LEVEL_INDEX = 6;
     public const string UNLOCK_PREF = "UNLOCK";
+    public Text levelText;
+    public Transform linesPanel;
+    public Transform emojiPanel;
+    public Transform selectPanel;
+
     public void LoadLevel(int index)
     {
         if (index > MAX_LEVEL_INDEX)
         {
             index = UnityEngine.Random.Range(2, MAX_LEVEL_INDEX - 1);
         }
+        //----
+        ClearAllBoard();
+        //----
         //Debug.Log("index load " + index);
-        if (!Application.CanStreamedLevelBeLoaded(index))
-        {
-            index = 1;
-        }
-        PlayerPrefs.SetInt(UNLOCK_PREF + index.ToString(), 1);
-        ClearSceneData.LoadLevelByIndex(index);
-        //OnPlayCanvas.gameObject.SetActive(true);
+        //if (!Application.CanStreamedLevelBeLoaded(index))
+        //{
+        //    index = 1;
+        //}
+        //PlayerPrefs.SetInt(UNLOCK_PREF + index.ToString(), 1);
+        //ClearSceneData.LoadLevelByIndex(index);
+        
+    }
 
-        //SceneManager.LoadScene("StayAlive_level_" + index.ToString("000"));
-        //AdsMgr.current.RequestInterstitial();
-        //AdsMgr.current.CreateAndLoadRewardedAd();
-        //UpdateHpStatus();
+    void ClearAllBoard()
+    {
+        foreach(Transform l in linesPanel)
+        {
+            l.gameObject.SetActive(false);
+        }
+
+        foreach(Transform e in emojiPanel)
+        {
+            e.gameObject.SetActive(false);
+        }
     }
 
     static bool m_ShuttingDown = false;
@@ -151,6 +189,7 @@ public class InitMgr : MonoBehaviour
 
     public GameObject winRoot;
     public GameObject loseRoot;
+    public GameObject playRoot;
 
     public void DisableAllUI()
     {

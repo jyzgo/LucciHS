@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/xEmoji/Scenes/InitScene.unity
+    guid: 5e68d508f3623ae42a3343a7a9313a13
   m_configObjects: {}
