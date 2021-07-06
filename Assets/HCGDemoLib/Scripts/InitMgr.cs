@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using MonsterLove.StateMachine;
+using MTUnity.Utils;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +9,10 @@ using UnityEngine.UI;
 public enum InitGameState
 {
     Ready,
+    SubInit,
     Playing,
+    SubWin,
+    Check,
     Win,
     Lose
 }
@@ -17,6 +21,28 @@ public class SentenceData
 {
     public List<string> wordsList = new List<string>();
     public string Sentence = "";
+}
+
+public class LevelConfData
+{
+    public int LevelIndex;
+    public List<int> levelIDs = new List<int>();
+    public string LevelDes = "";
+}
+
+public class WordConfData
+{
+    public List<string> words = new List<string>();
+    public string answer = "";
+    public List<int> icons = new List<int>();
+    public List<string> unusedWords = new List<string>();
+}
+
+public class iconConfData
+{
+    public int iconRef = 0;
+    public string msg = "";
+    public string des = "";
 }
 
 public class InitMgr : MonoBehaviour
@@ -74,6 +100,7 @@ public class InitMgr : MonoBehaviour
             retryBtn.onClick.AddListener(rewardBackToLast);
         }
         DisableAllUI();
+        LoadConf();
     }
 
     StateMachine<InitGameState> _fsm;
@@ -83,21 +110,88 @@ public class InitMgr : MonoBehaviour
     }
 
     List<SentenceData> _datas = new List<SentenceData>();
-    void Ready_Enter()
+    IEnumerator Ready_Enter()
     {
         print("Ready Game Ready");
-        ClearAllBoard();
         _datas.Clear();
-        LoadConf();
+        yield return new WaitForEndOfFrame();
+        CallPlay();
+
     }
 
     void LoadConf()
     {
         print("load conf");
+        LoadLevelConf();
+        LoadWordConf();
+        LoadIconConf();
+    }
+
+    List<LevelConfData> _lvDatas = new List<LevelConfData>();
+    void LoadLevelConf()
+    { 
         _lvConf = PareseObj(gameConfEnumsFileEnum.levelConf);
+        for (int i = 1; i < _lvConf.Count + 1; i++)
+        {
+            var curLevelJson = _lvConf["lv" + i];
+            var data = new LevelConfData();
+            data.LevelIndex = 1;
+            data.LevelDes = curLevelJson["des"].ToString();
+
+            for (int ji = 0; ji < 3; ji++)
+            {
+                var myI = (int)curLevelJson["id" + ji.ToString()];
+                data.levelIDs.Add(myI);
+            }
+            _lvDatas.Add(data);
+            //print("id + " + d.ToString());
+
+        }
+        //print("lev " + _lvConf.ToString() + " " + _lvConf.Count);
+    }
+
+    List<WordConfData> _wordConfDatas = new List<WordConfData>();
+    void LoadWordConf()
+    {
+        _wordConf = PareseObj(gameConfEnumsFileEnum.wordConf);
+        for (int i = 0; i < _wordConf.Count; i++)
+        {
+            var wc = _wordConf["id" + i.ToString()];
+            var size = (int)wc["size"];
+            
+            var data = new WordConfData();
+            data.answer = wc["answer"].ToString();
+            for (int j = 0; j < size; j++)
+            {
+                var curWord = wc["word" + j.ToString()].ToString();
+                var curIcon = wc["icon" + j.ToString()];
+                int id = 0;
+                if(curIcon != null)
+                {
+                    id = (int)curIcon;
+                }
+                data.words.Add(curWord);
+                data.icons.Add(id);
+            }
+            var uWords = wc["uwords"];
+            foreach (var w in uWords)
+            {
+                data.unusedWords.Add(w.ToString());
+            }
+            //print("wwww " + wc.ToString());
+            _wordConfDatas.Add(data);
+        }
+    }
+
+
+    void LoadIconConf()
+    {
+        _iconConf = PareseObj(gameConfEnumsFileEnum.iconConf);
     }
 
     JObject _lvConf;
+    JObject _wordConf;
+    JObject _iconConf;
     public static JObject PareseObj(gameConfEnumsFileEnum curEnum)
     {
         var fileName = curEnum.ToString();
@@ -178,15 +272,27 @@ public class InitMgr : MonoBehaviour
     public Transform emojiPanel;
     public Transform selectPanel;
 
+    public Text sentence;
+    public Image[] emojis;
+    public SelectBtn[] selectBtns;
     public void LoadLevel(int index)
     {
-        if (index > MAX_LEVEL_INDEX)
+        //if (index > MAX_LEVEL_INDEX)
+        //{
+        //    index = UnityEngine.Random.Range(2, MAX_LEVEL_INDEX - 1);
+        //}
+        if(index > _lvDatas.Count -1)
         {
-            index = UnityEngine.Random.Range(2, MAX_LEVEL_INDEX - 1);
+            index = UnityEngine.Random.Range(2, _lvDatas.Count - 1);
         }
         //----
-        ClearAllBoard();
+
         //----
+        _curLevelConfData = _lvDatas[index];
+        _wordIndex = 0;
+        _fsm.ChangeState(InitGameState.SubInit);
+        print("load level des " + _curLevelConfData.LevelDes);
+        levelText.text = "Level " + curLevelIndex.ToString();
         //Debug.Log("index load " + index);
         //if (!Application.CanStreamedLevelBeLoaded(index))
         //{
@@ -196,7 +302,105 @@ public class InitMgr : MonoBehaviour
         //ClearSceneData.LoadLevelByIndex(index);
         
     }
+    int _wordIndex = 0;
 
+    public SpriteRef _spriteRef;
+    readonly Color GREY = new Color(77f / 255f, 77f / 255f, 77f / 255f);
+    void SubInit_Enter()
+    {
+        ClearAllBoard();
+        int wordId =  _curLevelConfData.levelIDs[_wordIndex];
+        print("Sub init " + wordId);
+        _curWordData = _wordConfDatas[wordId];
+        sentence.text = _curWordData.answer;
+        sentence.gameObject.SetActive(false);
+        sentence.color = GREY;
+
+        print("ioccc " + _curWordData.icons.Count);
+        for (int i = 0; i < _curWordData.icons.Count; i++)
+        {
+            var iconId = _curWordData.icons[i];
+            emojis[i].gameObject.SetActive(true);
+            emojis[i].sprite = _spriteRef.refs[iconId];
+
+        }
+
+        List<string> btnContens = new List<string>();
+        btnContens.AddRange(_curWordData.words);
+        for (int i = 0; i < 9 - _curWordData.words.Count; i++)
+        {
+            btnContens.Add(_curWordData.unusedWords[i]);
+
+        }
+        btnContens.RandomShuffle();
+        for (int i = 0; i < selectBtns.Length; i++)
+        {
+            selectBtns[i].gameObject.SetActive(true);
+            selectBtns[i].ResetSelectBtn();
+            selectBtns[i].btnContent.text = btnContens[i];
+
+        }
+        print("answer is " + _curWordData.answer);
+        _isWinThisTime = true;
+
+    }
+
+    class TouchData
+    {
+        public SelectBtn btn;
+        public bool right;
+    }
+
+    List<TouchData> touchDataList = new List<TouchData>();
+    
+    int _btnTouchIndex = 0;
+    bool _isWinThisTime = true;
+
+    public void BePressed(string word)
+    {
+        if(!_curWordData.words[_btnTouchIndex].Equals(word))
+        {
+            print("ttt " + _curWordData.words[_btnTouchIndex] + " rr " + word);
+            _isWinThisTime = false;
+        }
+
+        _btnTouchIndex++;
+        if (_btnTouchIndex >= _curWordData.words.Count)
+        {
+            _fsm.ChangeState(InitGameState.Check);
+        }
+        print("Down " + word);
+    }
+
+    void Check_Enter()
+    {
+
+        sentence.gameObject.SetActive(true);
+        if(_isWinThisTime)
+        {
+            _fsm.ChangeState(InitGameState.Win);
+        }else
+        {
+            _fsm.ChangeState(InitGameState.Lose);
+        }
+    }
+
+    IEnumerator Win_Enter()
+    {
+        sentence.color = Color.green;
+        yield return new WaitForSeconds(2f);
+        _fsm.ChangeState(InitGameState.SubInit);
+    }
+
+    IEnumerator Lose_Enter()
+    {
+        sentence.color = Color.red;
+        yield return new WaitForSeconds(2f);
+        _fsm.ChangeState(InitGameState.SubInit);
+    }
+
+    LevelConfData _curLevelConfData;
+    WordConfData _curWordData;
     void ClearAllBoard()
     {
         foreach(Transform l in linesPanel)

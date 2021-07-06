@@ -40,7 +40,7 @@ PlayerSettings:
     width: 1
     height: 1
   m_SplashScreenLogos: []
-  m_VirtualRealitySplashScreen: {fileID: 2800000, guid: 66cd796a6aaaa5f4d97887ae725ecb7c, type: 3}
+  m_VirtualRealitySplashScreen: {fileID: 2800000, guid: b12df6a349b70e04fb682b470d8b8dfa, type: 3}
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 1024
   defaultScreenHeight: 768
@@ -123,7 +123,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1.01
+  bundleVersion: 1.02
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -172,7 +172,7 @@ PlayerSettings:
     Standalone: 1
     iPhone: 0
     tvOS: 0
-  AndroidBundleVersionCode: 4
+  AndroidBundleVersionCode: 2
   AndroidMinSdkVersion: 23
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -272,7 +272,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 66cd796a6aaaa5f4d97887ae725ecb7c, type: 3}
+      m_Icon: {fileID: 2800000, guid: b12df6a349b70e04fb682b470d8b8dfa, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0

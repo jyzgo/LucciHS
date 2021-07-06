@@ -57,7 +57,6 @@ public class AnalyzeMgr : MonoBehaviour
             }
             PlayerPrefs.SetString(GROUP_KEY, groupId);
         }
-        print("rrrr " + groupId);
         _IPAddress = GetLocalIPAddress();
         _deviceUid = SystemInfo.deviceUniqueIdentifier;
         _gameVersion = Application.version;
