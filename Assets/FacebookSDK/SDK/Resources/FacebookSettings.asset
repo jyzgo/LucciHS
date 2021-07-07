@@ -16,9 +16,9 @@ MonoBehaviour:
   clientTokens:
   - 
   appIds:
-  - 1123468061481534
+  - 413555616519530
   appLabels:
-  - ShapeShfiter
+  - EmojiCrasher
   cookie: 1
   logging: 1
   status: 1

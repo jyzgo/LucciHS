@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class MaxAdsMgr :MonoBehaviour
 {
-    string interAdsID = "1af1af4dc882f60f";
-    string rewardAdsID = "364fe21ced9c17a1";
+    string interAdsID = "8bc504b5516e85cf";
+    string rewardAdsID = "5293ea71600b9fd4";
     int interRetray;
     private void Awake()
     {
