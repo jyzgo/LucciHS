@@ -127,6 +127,8 @@ public class InitMgr : MonoBehaviour
     void LoadConf()
     {
         print("load conf");
+        curLevelIndex = PlayerPrefs.GetInt(CUR_LEVEL_KEY, 1);
+        curPlayerMaxIndex = PlayerPrefs.GetInt(CUR_MAX_LEVEL_KEY, 1); 
         LoadLevelConf();
         LoadWordConf();
         LoadIconConf();
@@ -317,6 +319,7 @@ public class InitMgr : MonoBehaviour
         int wordId =  _curLevelConfData.levelIDs[_wordIndex];
         print("Sub init " + wordId);
         _curWordData = _wordConfDatas[wordId];
+        _btnTouchIndex = 0;
         sentence.text = _curWordData.answer;
         sentence.gameObject.SetActive(false);
         sentence.color = GREY;
@@ -363,8 +366,9 @@ public class InitMgr : MonoBehaviour
 
     public void BePressed(string word)
     {
-        print("_bb " + _btnTouchIndex + " word " + word);
-        if(!_curWordData.words[_btnTouchIndex].Equals(word))
+        print("_bb " + _btnTouchIndex + " word " + word + " word count " + _curWordData.words.Count);
+
+        if (!_curWordData.words[_btnTouchIndex].Equals(word))
         {
             print("ttt " + _curWordData.words[_btnTouchIndex] + " rr " + word);
             _isWinThisTime = false;
@@ -398,6 +402,13 @@ public class InitMgr : MonoBehaviour
         sentence.color = Color.green;
         yield return new WaitForSeconds(2f);
         curLevelIndex++;
+        if(curLevelIndex >= curPlayerMaxIndex)
+        {
+            curPlayerMaxIndex = curLevelIndex + 1;
+        }
+
+        PlayerPrefs.SetInt(CUR_LEVEL_KEY, curLevelIndex);
+        PlayerPrefs.SetInt(CUR_MAX_LEVEL_KEY,curPlayerMaxIndex);
         _fsm.ChangeState(InitGameState.Ready);
     }
 
