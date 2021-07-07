@@ -66,6 +66,11 @@ public class InitMgr : MonoBehaviour
             return _current;
         }
     }
+
+    public const string CUR_MAX_LEVEL_KEY = "MAX_LEVEL_KEY";
+    public const string CUR_LEVEL_KEY = "CUR_LEVEL_KEY";
+
+    public GameObject buyEmojiRoot;
     public void InitCall()
     {
 
@@ -358,6 +363,7 @@ public class InitMgr : MonoBehaviour
 
     public void BePressed(string word)
     {
+        print("_bb " + _btnTouchIndex + " word " + word);
         if(!_curWordData.words[_btnTouchIndex].Equals(word))
         {
             print("ttt " + _curWordData.words[_btnTouchIndex] + " rr " + word);
@@ -387,9 +393,12 @@ public class InitMgr : MonoBehaviour
 
     IEnumerator Win_Enter()
     {
+        buyEmojiRoot.SetActive(true);
+        AdsMgr.current.ShowInter();
         sentence.color = Color.green;
         yield return new WaitForSeconds(2f);
-        _fsm.ChangeState(InitGameState.SubInit);
+        curLevelIndex++;
+        _fsm.ChangeState(InitGameState.Ready);
     }
 
     IEnumerator Lose_Enter()

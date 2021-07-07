@@ -653,9 +653,9 @@ public class AnalyzeMgr : MonoBehaviour
             curLv = InitMgr.current.GetCurrentLevelIndex();
         }
         return new Dictionary<string, object>() {
-            { "#account_id",_deviceUid},
-            { "#distinct_id",_deviceUid},
-            { "#event_time",DateTime.UtcNow},
+            { "account_id",_deviceUid},
+            { "distinct_id",_deviceUid},
+            { "event_time",DateTime.UtcNow},
             {"deviceid",_deviceUid },
             {"ip_address",_IPAddress},
             {"device",_deviceType},
