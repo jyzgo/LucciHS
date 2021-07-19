@@ -6,10 +6,16 @@ using UnityEngine.UI;
 
 public class ShifterDemo : MonoBehaviour
 {
+    public static ShifterDemo current;
+    private void Awake()
+    {
+        current = this;
+    }
 
     public Canvas ui;
     public Button buttonA;
     public Button buttonB;
+    public GameObject cheatBtn;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,10 +46,25 @@ public class ShifterDemo : MonoBehaviour
     {
         ui.gameObject.SetActive(false);
         yield return new WaitForSeconds(t);
+        AdsMgr.current.ShowInter();
         ui.gameObject.SetActive(true);
+        buttonA.gameObject.SetActive(false);
+        buttonB.gameObject.SetActive(false);
+        cheatBtn.SetActive(true);
 
     }
 
+    public void RewardCheat()
+    {
+        AnalyzeMgr.current.OnRewardBeforeShow(AdsFrom.Max);
+        print("reward cheat");
+        AdsMgr.current.ShowRewardAds(CallBack);
+    }
+
+    void CallBack()
+    {
+        AnalyzeMgr.current.OnRewardFinished(AdsFrom.Max);
+    }
     // Update is called once per frame
     void Update()
     {
