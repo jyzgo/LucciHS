@@ -6573,8 +6573,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 569577621}
-  m_LocalRotation: {x: -0.007049199, y: 0.99220365, z: -0.10516034, w: -0.06651029}
-  m_LocalPosition: {x: 33.27724, y: 4, z: 13.253929}
+  m_LocalRotation: {x: -0.0524591, y: -0.8625003, z: 0.09141351, w: -0.49495944}
+  m_LocalPosition: {x: 19.399994, y: 4, z: -73.16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -8497,7 +8497,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 734827793}
-  m_LocalRotation: {x: 0.34770012, y: -0.6880321, z: 0.23088004, w: -0.59364206}
+  m_LocalRotation: {x: 0.29399857, y: -0.581767, z: 0.19522108, w: 0.2598909}
   m_LocalPosition: {x: 1.9203453, y: 7.712015, z: -4.230002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -8851,6 +8851,10 @@ PrefabInstance:
     - target: {fileID: 1160080498521440, guid: a040b23558fd6b442819f2618ade38b7, type: 3}
       propertyPath: m_Name
       value: FlowerTrail
+      objectReference: {fileID: 0}
+    - target: {fileID: 1160080498521440, guid: a040b23558fd6b442819f2618ade38b7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4575511260320902, guid: a040b23558fd6b442819f2618ade38b7, type: 3}
       propertyPath: m_RootOrder
@@ -9288,7 +9292,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &780577498
 Transform:
   m_ObjectHideFlags: 0
@@ -11361,7 +11365,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &963965395
 Transform:
   m_ObjectHideFlags: 0
@@ -13089,6 +13093,10 @@ PlayableDirector:
     value: {fileID: 9034271927443396222}
   - key: {fileID: -8208186042538043247, guid: 55274f26636db412c900ceff69284b45, type: 2}
     value: {fileID: 4036859725199990240}
+  - key: {fileID: -2126896356410747769, guid: 55274f26636db412c900ceff69284b45, type: 2}
+    value: {fileID: 1905958425}
+  - key: {fileID: 3451789416691823190, guid: 55274f26636db412c900ceff69284b45, type: 2}
+    value: {fileID: 1905958430}
   m_ExposedReferences:
     m_References: []
 --- !u!4 &1080922650
@@ -21115,7 +21123,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1076536679}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -0.000001930091, y: 0.000001769695, z: -0.0000002391683}
+  m_LocalEulerAnglesHint: {x: -0.00000183792, y: 0.00004223909, z: 359.97}
 --- !u!114 &1905958427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42433,7 +42441,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &5036681109805099261
 Animator:
   serializedVersion: 3
