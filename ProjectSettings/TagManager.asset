@@ -15,9 +15,9 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - MedicalChair+Stool+Wall
+  - MedicalFloors
+  - MedicalRoom
   - 
   - 
   - 
@@ -35,7 +35,7 @@ TagManager:
   - Player
   - 
   - 
-  - 
+  - BlockBeach
   - 
   - 
   - DirectionalLight
