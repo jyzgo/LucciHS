@@ -1,0 +1,3 @@
+[submodule "Assets/AdsKeys"]
+	path = Assets/AdsKeys
+	url = git@github.com:jyzgo/KeysForHCG.git
