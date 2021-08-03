@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/xEmoji/Scenes/InitScene.unity
-    guid: 5e68d508f3623ae42a3343a7a9313a13
+    path: Assets/HCGDemoLib/InitScene.unity
+    guid: 041cf14934538634b8b54a88b499a9ef
   m_configObjects: {}

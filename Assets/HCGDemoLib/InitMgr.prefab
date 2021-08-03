@@ -1446,7 +1446,7 @@ Animator:
   m_GameObject: {fileID: 2846501714554934416}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 94f8b8e88944e4e9b94daa74f9f6f6d5, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -3650,7 +3650,7 @@ Animator:
   m_GameObject: {fileID: 2926947777431761229}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 037cb1f99ef9545e9ac5e998bca5e549, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -4237,11 +4237,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b358e247cb1dee4e980fb11987dbdaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buyEmojiRoot: {fileID: 0}
   MAX_LEVEL_INDEX: 7
+  levelText: {fileID: 0}
+  linesPanel: {fileID: 0}
+  emojiPanel: {fileID: 0}
+  selectPanel: {fileID: 0}
+  sentence: {fileID: 0}
+  emojis: []
+  selectBtns: []
+  _spriteRef: {fileID: 0}
   winRoot: {fileID: 2926947777431761229}
   loseRoot: {fileID: 7135129836655431860}
-  nextLevelBtn: {fileID: 2926947776387559401}
-  noThanksBtn: {fileID: 5697746480415735175}
+  playRoot: {fileID: 0}
+  nextLevelBtn:
+  - {fileID: 0}
+  noThanksBtn:
+  - {fileID: 0}
   rewardBackBtn: {fileID: 2547994481324364444}
   retryBtn: {fileID: 6997798954796022175}
 --- !u!1 &3625718507851426429
@@ -5490,7 +5502,7 @@ Animator:
   m_GameObject: {fileID: 7135129836655431860}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 037cb1f99ef9545e9ac5e998bca5e549, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
