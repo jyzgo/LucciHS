@@ -5215,8 +5215,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 569577621}
-  m_LocalRotation: {x: 0.09141353, y: -0.49495956, z: 0.052459326, w: 0.86250025}
-  m_LocalPosition: {x: 4.7700014, y: 4, z: -5.2900004}
+  m_LocalRotation: {x: -0.10173329, y: -0.25989094, z: 0.027544968, w: -0.9598689}
+  m_LocalPosition: {x: -10.400001, y: 4, z: -10.599998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -11155,7 +11155,7 @@ MonoBehaviour:
   lastPressTime: 0
   GlowPosOffest: {x: 0, y: 0, z: 0}
   GlowScale: {x: 1, y: 1, z: 1}
-  msg: 02-3-lose
+  msg: 02-3-win
 --- !u!114 &997058933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21366,7 +21366,7 @@ MonoBehaviour:
   lastPressTime: 0
   GlowPosOffest: {x: 0, y: 0, z: 0}
   GlowScale: {x: 1, y: 1, z: 1}
-  msg: 02-3-win
+  msg: 02-3-lose
 --- !u!114 &1999341994
 MonoBehaviour:
   m_ObjectHideFlags: 0
