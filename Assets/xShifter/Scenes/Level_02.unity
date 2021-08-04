@@ -5215,8 +5215,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 569577621}
-  m_LocalRotation: {x: 0.10453031, y: -0.12721828, z: 0.013483442, w: 0.9862592}
-  m_LocalPosition: {x: -46.09304, y: 4.02, z: -92.06489}
+  m_LocalRotation: {x: 0.09141353, y: -0.49495956, z: 0.052459326, w: 0.86250025}
+  m_LocalPosition: {x: 4.7700014, y: 4, z: -5.2900004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -20854,7 +20854,7 @@ MonoBehaviour:
   - timelineKey: 02-3-win
     director: {fileID: 1176125855}
     nextDir: {fileID: 0}
-    winState: 0
+    winState: 1
   - timelineKey: 02-3-lose
     director: {fileID: 1407006174}
     nextDir: {fileID: 0}

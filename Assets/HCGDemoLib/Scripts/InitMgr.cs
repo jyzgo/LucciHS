@@ -284,11 +284,11 @@ public class InitMgr : MonoBehaviour
     public SelectBtn[] selectBtns;
     public void LoadLevel(int index)
     {
-        //if (index > MAX_LEVEL_INDEX)
-        //{
-        //    index = UnityEngine.Random.Range(2, MAX_LEVEL_INDEX - 1);
-        //}
-        if(index > _lvDatas.Count -1)
+        if (index > MAX_LEVEL_INDEX)
+        {
+            index = UnityEngine.Random.Range(2, MAX_LEVEL_INDEX - 1);
+        }
+        if (index > _lvDatas.Count -1)
         {
             index = UnityEngine.Random.Range(2, _lvDatas.Count - 1);
         }
@@ -297,17 +297,17 @@ public class InitMgr : MonoBehaviour
         //----
         _curLevelConfData = _lvDatas[index];
         _wordIndex = 0;
-        _fsm.ChangeState(InitGameState.SubInit);
+        //_fsm.ChangeState(InitGameState.SubInit);
         print("load level des " + _curLevelConfData.LevelDes);
         //levelText.text = "Level " + curLevelIndex.ToString();
-        //Debug.Log("index load " + index);
-        //if (!Application.CanStreamedLevelBeLoaded(index))
-        //{
-        //    index = 1;
-        //}
-        //PlayerPrefs.SetInt(UNLOCK_PREF + index.ToString(), 1);
-        //ClearSceneData.LoadLevelByIndex(index);
-        
+        Debug.Log("index load " + index);
+        if (!Application.CanStreamedLevelBeLoaded(index))
+        {
+            index = 1;
+        }
+        PlayerPrefs.SetInt(UNLOCK_PREF + index.ToString(), 1);
+        ClearSceneData.LoadLevelByIndex(index);
+
     }
     int _wordIndex = 0;
 

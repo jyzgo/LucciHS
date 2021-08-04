@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 386572813539884942}
   - component: {fileID: 8329739360279303033}
   - component: {fileID: 6284166031079940242}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,13 +146,13 @@ GameObject:
   - component: {fileID: 8791514529135593248}
   - component: {fileID: 7120174329544186837}
   - component: {fileID: 7241626533521301086}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: StartCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1242474760740710343
 RectTransform:
   m_ObjectHideFlags: 0
@@ -288,7 +288,7 @@ GameObject:
   - component: {fileID: 3909758510406870962}
   - component: {fileID: 3909758510406870965}
   - component: {fileID: 3909758510406870964}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RewardBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -407,7 +407,7 @@ GameObject:
   - component: {fileID: 3909758510446898167}
   - component: {fileID: 3909758510446898165}
   - component: {fileID: 3909758510446898164}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -486,7 +486,7 @@ GameObject:
   - component: {fileID: 3909758510618752473}
   - component: {fileID: 3909758510618752487}
   - component: {fileID: 3909758510618752486}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -565,7 +565,7 @@ GameObject:
   - component: {fileID: 3909758511337796137}
   - component: {fileID: 3909758511337796151}
   - component: {fileID: 3909758511337796150}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -645,7 +645,7 @@ GameObject:
   - component: {fileID: 3909758511442213563}
   - component: {fileID: 3909758511442213562}
   - component: {fileID: 3909758511442213565}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: NextButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -666,10 +666,10 @@ RectTransform:
   m_Father: {fileID: 3909758512051463182}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -300}
-  m_SizeDelta: {x: -690, y: -1757}
+  m_SizeDelta: {x: 338, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3909758511442213563
 CanvasRenderer:
@@ -826,7 +826,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3909758511856825592}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LoseCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -868,7 +868,7 @@ GameObject:
   - component: {fileID: 3909758511925524626}
   - component: {fileID: 3909758511925524629}
   - component: {fileID: 3909758511925524628}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -969,7 +969,7 @@ GameObject:
   - component: {fileID: 3909758512049097567}
   - component: {fileID: 3909758512049097566}
   - component: {fileID: 3909758512049097553}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Next (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1087,13 +1087,13 @@ GameObject:
   m_Component:
   - component: {fileID: 3909758512051463182}
   - component: {fileID: 3480198963802729946}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WinCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3909758512051463182
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1147,7 +1147,7 @@ GameObject:
   - component: {fileID: 3909758512148003322}
   - component: {fileID: 3909758512148003320}
   - component: {fileID: 3909758512148003323}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1227,7 +1227,7 @@ GameObject:
   - component: {fileID: 3909758512514507345}
   - component: {fileID: 3909758512514507344}
   - component: {fileID: 3909758512514507347}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RewardBack (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1346,7 +1346,7 @@ GameObject:
   - component: {fileID: 8724174289318846833}
   - component: {fileID: 2146435269280782207}
   - component: {fileID: 2653491857356151947}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LevelCompletedText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1367,10 +1367,10 @@ RectTransform:
   m_Father: {fileID: 3909758512051463182}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 77}
-  m_SizeDelta: {x: -586, y: -1798}
+  m_SizeDelta: {x: 442, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2146435269280782207
 CanvasRenderer:
@@ -1394,7 +1394,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1526,7 +1526,7 @@ GameObject:
   - component: {fileID: 8168111279060549975}
   - component: {fileID: 2572928714528528825}
   - component: {fileID: 807125570685475558}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ShineWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1574,7 +1574,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1601,7 +1601,7 @@ GameObject:
   - component: {fileID: 4231617982012784804}
   - component: {fileID: 8887358367450380744}
   - component: {fileID: 7270631894154168119}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -16234,7 +16234,7 @@ MonoBehaviour:
   - timelineKey: 04-3-win
     director: {fileID: 1624817861}
     nextDir: {fileID: 0}
-    winState: 0
+    winState: 1
   - timelineKey: 04-3-lose
     director: {fileID: 1376130448}
     nextDir: {fileID: 0}
@@ -16242,7 +16242,7 @@ MonoBehaviour:
   - timelineKey: 04-3-reward
     director: {fileID: 403777177}
     nextDir: {fileID: 0}
-    winState: 0
+    winState: 1
   timelineIndex: 0
 --- !u!1 &1361679698
 GameObject:
