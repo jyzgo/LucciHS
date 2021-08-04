@@ -7,6 +7,7 @@ public class InitStarter : MonoBehaviour
     private void Awake()
     {
         InitMgr.current.InitCall();
-        ClearSceneData.LoadLevelByIndex(1);
+        int curLevl = InitMgr.current.GetCurrentLevelIndex();
+        ClearSceneData.LoadLevelByIndex(curLevl);
     }
 }

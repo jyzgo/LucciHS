@@ -6,7 +6,10 @@ public class RewardCheatBtn :BtnExtension
 {
     protected override void OnPressed()
     {
-        ShifterDemo.current.RewardCheat();
+        AdsMgr.current.ShowRewardAds(DoNothing);
+    }
+    void DoNothing()
+    {
     }
 
 }

@@ -400,15 +400,18 @@ public class InitMgr : MonoBehaviour
         buyEmojiRoot.SetActive(true);
         AdsMgr.current.ShowInter();
         sentence.color = Color.green;
-        yield return new WaitForSeconds(2f);
         curLevelIndex++;
         if(curLevelIndex >= curPlayerMaxIndex)
         {
             curPlayerMaxIndex = curLevelIndex + 1;
         }
 
+        print("cur level is " + curLevelIndex);
         PlayerPrefs.SetInt(CUR_LEVEL_KEY, curLevelIndex);
         PlayerPrefs.SetInt(CUR_MAX_LEVEL_KEY,curPlayerMaxIndex);
+
+
+        yield return new WaitForSeconds(2f);
         _fsm.ChangeState(InitGameState.Ready);
     }
 
@@ -463,6 +466,16 @@ public class InitMgr : MonoBehaviour
     }
     public void ToWin()
     {
+        curLevelIndex++;
+        if (curLevelIndex >= curPlayerMaxIndex)
+        {
+            curPlayerMaxIndex = curLevelIndex + 1;
+        }
+
+        print("cur level is " + curLevelIndex);
+        PlayerPrefs.SetInt(CUR_LEVEL_KEY, curLevelIndex);
+        PlayerPrefs.SetInt(CUR_MAX_LEVEL_KEY, curPlayerMaxIndex);
+
         AnalyzeMgr.current.OnLevelWon(curLevelIndex, (int)(Time.time-TimeLineMgr.StartGameTime));
         AdsMgr.current.ShowInter();
         DisableAllUI();
@@ -473,7 +486,7 @@ public class InitMgr : MonoBehaviour
     {
         AnalyzeMgr.current.OnLevelLose(curLevelIndex, "none");
         DisableAllUI();
-        loseRoot.SetActive(true);
+        //loseRoot.SetActive(true);
         bool isFirst = TimeLineMgr.current.timelineIndex == 1;
 
         AdsMgr.current.ShowInter();
