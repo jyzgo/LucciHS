@@ -299,7 +299,7 @@ public class InitMgr : MonoBehaviour
         _wordIndex = 0;
         _fsm.ChangeState(InitGameState.SubInit);
         print("load level des " + _curLevelConfData.LevelDes);
-        levelText.text = "Level " + curLevelIndex.ToString();
+        //levelText.text = "Level " + curLevelIndex.ToString();
         //Debug.Log("index load " + index);
         //if (!Application.CanStreamedLevelBeLoaded(index))
         //{
@@ -476,9 +476,11 @@ public class InitMgr : MonoBehaviour
         loseRoot.SetActive(true);
         bool isFirst = TimeLineMgr.current.timelineIndex == 1;
 
+        AdsMgr.current.ShowInter();
+        CallPlay();
         print("tt " + TimeLineMgr.current.timelineIndex);
-        retryBtn.gameObject.SetActive(isFirst);
-        rewardBackBtn.gameObject.SetActive(!isFirst);
+        //retryBtn.gameObject.SetActive(isFirst);
+        //rewardBackBtn.gameObject.SetActive(!isFirst);
     }
 
     public void RestartLevel()
