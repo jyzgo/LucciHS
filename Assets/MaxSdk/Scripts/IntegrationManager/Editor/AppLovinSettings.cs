@@ -25,6 +25,7 @@ public class AppLovinSettings : ScriptableObject
 
     public const string DefaultUserTrackingDescriptionEnV0 = "Pressing \\\"Allow\\\" uses device info for more relevant ad content";
     public const string DefaultUserTrackingDescriptionEnV1 = "This only uses device info for less annoying, more relevant ads";
+    public const string DefaultUserTrackingDescriptionEnV2 = "This only uses device info for more interesting and relevant ads";
 
     public const string DefaultUserTrackingDescriptionDe = "\\\"Erlauben\\\" drücken benutzt Gerätinformationen für relevantere Werbeinhalte";
     public const string DefaultUserTrackingDescriptionEs = "Presionando \\\"Permitir\\\", se usa la información del dispositivo para obtener contenido publicitario más relevante";
@@ -131,9 +132,10 @@ public class AppLovinSettings : ScriptableObject
         get
         {
             // Update the default EN description if an old version of the description is still being used.
-            if (DefaultUserTrackingDescriptionEnV0.Equals(Instance.UserTrackingUsageDescriptionEn))
+            if (DefaultUserTrackingDescriptionEnV0.Equals(Instance.UserTrackingUsageDescriptionEn)
+                || DefaultUserTrackingDescriptionEnV1.Equals(Instance.UserTrackingUsageDescriptionEn))
             {
-                Instance.UserTrackingUsageDescriptionEn = DefaultUserTrackingDescriptionEnV1;
+                Instance.UserTrackingUsageDescriptionEn = DefaultUserTrackingDescriptionEnV2;
             }
 
             return Instance.consentFlowEnabled;
@@ -148,7 +150,7 @@ public class AppLovinSettings : ScriptableObject
                 // If the value didn't change, we don't need to update anything.
                 if (previousValue) return;
 
-                Instance.UserTrackingUsageDescriptionEn = DefaultUserTrackingDescriptionEnV1;
+                Instance.UserTrackingUsageDescriptionEn = DefaultUserTrackingDescriptionEnV2;
                 Instance.UserTrackingUsageLocalizationEnabled = true;
             }
             else
@@ -204,7 +206,7 @@ public class AppLovinSettings : ScriptableObject
             if (value)
             {
                 // If the value didn't change or the english localization text is not the default one, we don't need to update anything.
-                if (previousValue || !DefaultUserTrackingDescriptionEnV1.Equals(Instance.UserTrackingUsageDescriptionEn)) return;
+                if (previousValue || !DefaultUserTrackingDescriptionEnV2.Equals(Instance.UserTrackingUsageDescriptionEn)) return;
 
                 Instance.UserTrackingUsageDescriptionDe = DefaultUserTrackingDescriptionDe;
                 Instance.UserTrackingUsageDescriptionEs = DefaultUserTrackingDescriptionEs;

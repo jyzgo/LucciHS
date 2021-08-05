@@ -5,7 +5,7 @@
 
 #import "MAUnityAdManager.h"
 
-#define VERSION @"4.3.0"
+#define VERSION @"4.3.4"
 
 #define KEY_WINDOW [UIApplication sharedApplication].keyWindow
 #define DEVICE_SPECIFIC_ADVIEW_AD_FORMAT ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) ? MAAdFormat.leader : MAAdFormat.banner
@@ -37,7 +37,7 @@ extern "C" {
 }
 #endif
 
-@interface MAUnityAdManager()<MAAdDelegate, MAAdViewAdDelegate, MARewardedAdDelegate, ALVariableServiceDelegate>
+@interface MAUnityAdManager()<MAAdDelegate, MAAdViewAdDelegate, MARewardedAdDelegate, MAAdRevenueDelegate, ALVariableServiceDelegate>
 
 // Parent Fields
 @property (nonatomic, weak) ALSdk *sdk;
@@ -53,13 +53,13 @@ extern "C" {
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSString *> *adViewPositions;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSValue *> *adViewOffsets;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *adViewWidths;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *adViewHeights; // Cross promo only
-@property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *adViewRotations; // Cross promo only
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *crossPromoAdViewHeights;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, NSNumber *> *crossPromoAdViewRotations;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, MAAdFormat *> *verticalAdViewFormats;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSArray<NSLayoutConstraint *> *> *adViewConstraints;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, NSString *> *> *adViewExtraParametersToSetAfterCreate;
 @property (nonatomic, strong) NSMutableArray<NSString *> *adUnitIdentifiersToShowAfterCreate;
-@property (nonatomic, strong) NSMutableSet<NSString *> *adaptiveBannerAdUnitIdentifiers;
+@property (nonatomic, strong) NSMutableSet<NSString *> *disabledAdaptiveBannerAdUnitIdentifiers;
 @property (nonatomic, strong) UIView *safeAreaBackground;
 @property (nonatomic, strong, nullable) UIColor *publisherBannerBackgroundColor;
 
@@ -116,13 +116,13 @@ static NSString *ALSerializeKeyValuePairSeparator;
         self.adViewPositions = [NSMutableDictionary dictionaryWithCapacity: 2];
         self.adViewOffsets = [NSMutableDictionary dictionaryWithCapacity: 2];
         self.adViewWidths = [NSMutableDictionary dictionaryWithCapacity: 2];
-        self.adViewHeights = [NSMutableDictionary dictionaryWithCapacity: 2];
-        self.adViewRotations = [NSMutableDictionary dictionaryWithCapacity: 2];
+        self.crossPromoAdViewHeights = [NSMutableDictionary dictionaryWithCapacity: 2];
+        self.crossPromoAdViewRotations = [NSMutableDictionary dictionaryWithCapacity: 2];
         self.verticalAdViewFormats = [NSMutableDictionary dictionaryWithCapacity: 2];
         self.adViewConstraints = [NSMutableDictionary dictionaryWithCapacity: 2];
         self.adViewExtraParametersToSetAfterCreate = [NSMutableDictionary dictionaryWithCapacity: 1];
         self.adUnitIdentifiersToShowAfterCreate = [NSMutableArray arrayWithCapacity: 2];
-        self.adaptiveBannerAdUnitIdentifiers = [NSMutableSet setWithCapacity: 1];
+        self.disabledAdaptiveBannerAdUnitIdentifiers = [NSMutableSet setWithCapacity: 2];
         self.adInfoDict = [NSMutableDictionary dictionary];
         self.adInfoDictLock = [[NSObject alloc] init];
         
@@ -312,8 +312,8 @@ static NSString *ALSerializeKeyValuePairSeparator;
 - (void)createCrossPromoAdWithAdUnitIdentifier:(NSString *)adUnitIdentifier x:(CGFloat)xOffset y:(CGFloat)yOffset width:(CGFloat)width height:(CGFloat)height rotation:(CGFloat)rotation
 {
     self.adViewWidths[adUnitIdentifier] = @(width);
-    self.adViewHeights[adUnitIdentifier] = @(height);
-    self.adViewRotations[adUnitIdentifier] = @(rotation);
+    self.crossPromoAdViewHeights[adUnitIdentifier] = @(height);
+    self.crossPromoAdViewRotations[adUnitIdentifier] = @(rotation);
     [self createAdViewWithAdUnitIdentifier: adUnitIdentifier adFormat: MAAdFormat.crossPromo atPosition: DEFAULT_AD_VIEW_POSITION withOffset: CGPointMake(xOffset, yOffset)];
 }
 
@@ -325,8 +325,8 @@ static NSString *ALSerializeKeyValuePairSeparator;
 - (void)updateCrossPromoAdPositionForAdUnitIdentifier:(NSString *)adUnitIdentifier x:(CGFloat)xOffset y:(CGFloat)yOffset width:(CGFloat)width height:(CGFloat)height rotation:(CGFloat)rotation
 {
     self.adViewWidths[adUnitIdentifier] = @(width);
-    self.adViewHeights[adUnitIdentifier] = @(height);
-    self.adViewRotations[adUnitIdentifier] = @(rotation);
+    self.crossPromoAdViewHeights[adUnitIdentifier] = @(height);
+    self.crossPromoAdViewRotations[adUnitIdentifier] = @(rotation);
     [self updateAdViewPosition: DEFAULT_AD_VIEW_POSITION withOffset: CGPointMake(xOffset, yOffset) forAdUnitIdentifier: adUnitIdentifier adFormat: MAAdFormat.crossPromo];
 }
 
@@ -622,44 +622,6 @@ static NSString *ALSerializeKeyValuePairSeparator;
     [MAUnityAdManager forwardUnityEventWithArgs: args];
 }
 
-- (void)didPayRevenueForAd:(MAAd *)ad
-{
-    NSString *name;
-    MAAdFormat *adFormat = ad.format;
-    if ( MAAdFormat.banner == adFormat || MAAdFormat.leader == adFormat )
-    {
-        name = @"OnBannerAdRevenuePaidEvent";
-    }
-    else if ( MAAdFormat.mrec == adFormat )
-    {
-        name = @"OnMRecAdRevenuePaidEvent";
-    }
-    else if ( MAAdFormat.crossPromo == adFormat )
-    {
-        name = @"OnCrossPromoAdRevenuePaidEvent";
-    }
-    else if ( MAAdFormat.interstitial == adFormat )
-    {
-        name = @"OnInterstitialAdRevenuePaidEvent";
-    }
-    else if ( MAAdFormat.rewarded == adFormat )
-    {
-        name = @"OnRewardedAdRevenuePaidEvent";
-    }
-    else if ( MAAdFormat.rewardedInterstitial == adFormat )
-    {
-        name = @"OnRewardedInterstitialAdRevenuePaidEvent";
-    }
-    else
-    {
-        [self logInvalidAdFormat: adFormat];
-        return;
-    }
-    
-    NSDictionary<NSString *, NSString *> *args = [self defaultAdEventParametersForName: name withAd: ad];
-    [MAUnityAdManager forwardUnityEventWithArgs: args];
-}
-
 - (void)didDisplayAd:(MAAd *)ad
 {
     // BMLs do not support [DISPLAY] events in Unity
@@ -820,6 +782,44 @@ static NSString *ALSerializeKeyValuePairSeparator;
     [MAUnityAdManager forwardUnityEventWithArgs: args];
 }
 
+- (void)didPayRevenueForAd:(MAAd *)ad
+{
+    NSString *name;
+    MAAdFormat *adFormat = ad.format;
+    if ( MAAdFormat.banner == adFormat || MAAdFormat.leader == adFormat )
+    {
+        name = @"OnBannerAdRevenuePaidEvent";
+    }
+    else if ( MAAdFormat.mrec == adFormat )
+    {
+        name = @"OnMRecAdRevenuePaidEvent";
+    }
+    else if ( MAAdFormat.crossPromo == adFormat )
+    {
+        name = @"OnCrossPromoAdRevenuePaidEvent";
+    }
+    else if ( MAAdFormat.interstitial == adFormat )
+    {
+        name = @"OnInterstitialAdRevenuePaidEvent";
+    }
+    else if ( MAAdFormat.rewarded == adFormat )
+    {
+        name = @"OnRewardedAdRevenuePaidEvent";
+    }
+    else if ( MAAdFormat.rewardedInterstitial == adFormat )
+    {
+        name = @"OnRewardedInterstitialAdRevenuePaidEvent";
+    }
+    else
+    {
+        [self logInvalidAdFormat: adFormat];
+        return;
+    }
+    
+    NSDictionary<NSString *, NSString *> *args = [self defaultAdEventParametersForName: name withAd: ad];
+    [MAUnityAdManager forwardUnityEventWithArgs: args];
+}
+
 - (NSMutableDictionary<NSString *, NSString *> *)defaultAdEventParametersForName:(NSString *)name withAd:(MAAd *)ad
 {
     NSMutableDictionary<NSString *, NSString *> *args = [[self adInfoForAd: ad] mutableCopy];
@@ -965,22 +965,24 @@ static NSString *ALSerializeKeyValuePairSeparator;
         if ( [@"force_banner" isEqualToString: key] )
         {
             BOOL shouldForceBanner = [NSNumber al_numberWithString: value].boolValue;
-            MAAdFormat *adFormat = shouldForceBanner ? MAAdFormat.banner : DEVICE_SPECIFIC_ADVIEW_AD_FORMAT;
+            MAAdFormat *forcedAdFormat = shouldForceBanner ? MAAdFormat.banner : DEVICE_SPECIFIC_ADVIEW_AD_FORMAT;
             
-            self.adViewAdFormats[adUnitIdentifier] = adFormat;
-            [self positionAdViewForAdUnitIdentifier: adUnitIdentifier adFormat: adFormat];
+            self.adViewAdFormats[adUnitIdentifier] = forcedAdFormat;
+            [self positionAdViewForAdUnitIdentifier: adUnitIdentifier adFormat: forcedAdFormat];
         }
         else if ( [@"adaptive_banner" isEqualToString: key] )
         {
             BOOL shouldUseAdaptiveBanner = [NSNumber al_numberWithString: value].boolValue;
             if ( shouldUseAdaptiveBanner )
             {
-                [self.adaptiveBannerAdUnitIdentifiers addObject: adUnitIdentifier];
+                [self.disabledAdaptiveBannerAdUnitIdentifiers removeObject: adUnitIdentifier];
             }
             else
             {
-                [self.adaptiveBannerAdUnitIdentifiers removeObject: adUnitIdentifier];
+                [self.disabledAdaptiveBannerAdUnitIdentifiers addObject: adUnitIdentifier];
             }
+            
+            [self positionAdViewForAdUnitIdentifier: adUnitIdentifier adFormat: adFormat];
         }
     }
 }
@@ -1059,6 +1061,7 @@ static NSString *ALSerializeKeyValuePairSeparator;
         
         MAAdView *view = [self retrieveAdViewForAdUnitIdentifier: adUnitIdentifier adFormat: adFormat];
         view.delegate = nil;
+        view.revenueDelegate = nil;
         
         [view removeFromSuperview];
         
@@ -1067,10 +1070,10 @@ static NSString *ALSerializeKeyValuePairSeparator;
         [self.adViewPositions removeObjectForKey: adUnitIdentifier];
         [self.adViewOffsets removeObjectForKey: adUnitIdentifier];
         [self.adViewWidths removeObjectForKey: adUnitIdentifier];
-        [self.adViewHeights removeObjectForKey: adUnitIdentifier];
-        [self.adViewRotations removeObjectForKey: adUnitIdentifier];
+        [self.crossPromoAdViewHeights removeObjectForKey: adUnitIdentifier];
+        [self.crossPromoAdViewRotations removeObjectForKey: adUnitIdentifier];
         [self.verticalAdViewFormats removeObjectForKey: adUnitIdentifier];
-        [self.adaptiveBannerAdUnitIdentifiers removeObject: adUnitIdentifier];
+        [self.disabledAdaptiveBannerAdUnitIdentifiers removeObject: adUnitIdentifier];
     });
 }
 
@@ -1096,6 +1099,7 @@ static NSString *ALSerializeKeyValuePairSeparator;
     {
         result = [[MAInterstitialAd alloc] initWithAdUnitIdentifier: adUnitIdentifier sdk: self.sdk];
         result.delegate = self;
+        result.revenueDelegate = self;
         
         self.interstitials[adUnitIdentifier] = result;
     }
@@ -1110,6 +1114,7 @@ static NSString *ALSerializeKeyValuePairSeparator;
     {
         result = [MARewardedAd sharedWithAdUnitIdentifier: adUnitIdentifier sdk: self.sdk];
         result.delegate = self;
+        result.revenueDelegate = self;
         
         self.rewardedAds[adUnitIdentifier] = result;
     }
@@ -1124,6 +1129,7 @@ static NSString *ALSerializeKeyValuePairSeparator;
     {
         result = [[MARewardedInterstitialAd alloc] initWithAdUnitIdentifier: adUnitIdentifier sdk: self.sdk];
         result.delegate = self;
+        result.revenueDelegate = self;
         
         self.rewardedInterstitialAds[adUnitIdentifier] = result;
     }
@@ -1146,6 +1152,7 @@ static NSString *ALSerializeKeyValuePairSeparator;
         result.userInteractionEnabled = NO;
         result.translatesAutoresizingMaskIntoConstraints = NO;
         result.delegate = self;
+        result.revenueDelegate = self;
         
         self.adViews[adUnitIdentifier] = result;
         self.adViewPositions[adUnitIdentifier] = adViewPosition;
@@ -1170,10 +1177,10 @@ static NSString *ALSerializeKeyValuePairSeparator;
         NSString *adViewPosition = self.adViewPositions[adUnitIdentifier];
         NSValue *adViewPositionValue = self.adViewOffsets[adUnitIdentifier];
         CGPoint adViewOffset = [adViewPositionValue CGPointValue];
-        BOOL isAdaptiveBannerEnabled = [self.adaptiveBannerAdUnitIdentifiers containsObject: adUnitIdentifier];
+        BOOL isAdaptiveBannerDisabled = [self.disabledAdaptiveBannerAdUnitIdentifiers containsObject: adUnitIdentifier];
         BOOL isWidthPtsOverridden = self.adViewWidths[adUnitIdentifier] != nil;
-        BOOL isHeightPtsOverridden = self.adViewHeights[adUnitIdentifier] != nil;
-        BOOL isRotationOverridden = self.adViewRotations[adUnitIdentifier] != nil;
+        BOOL isCrossPromoHeightPtsOverridden = self.crossPromoAdViewHeights[adUnitIdentifier] != nil;
+        BOOL isCrossPromoRotationOverridden = self.crossPromoAdViewRotations[adUnitIdentifier] != nil;
         
         UIView *superview = adView.superview;
         if ( !superview ) return;
@@ -1221,11 +1228,11 @@ static NSString *ALSerializeKeyValuePairSeparator;
         //
         CGFloat adViewHeight;
         
-        if ( isHeightPtsOverridden )
+        if ( isCrossPromoHeightPtsOverridden )
         {
-            adViewHeight = self.adViewHeights[adUnitIdentifier].floatValue;
+            adViewHeight = self.crossPromoAdViewHeights[adUnitIdentifier].floatValue;
         }
-        else if ( isAdaptiveBannerEnabled )
+        else if ( (adFormat == MAAdFormat.banner || adFormat == MAAdFormat.leader) && !isAdaptiveBannerDisabled )
         {
             adViewHeight = [adFormat adaptiveSizeForWidth: adViewWidth].height;
         }
@@ -1252,7 +1259,7 @@ static NSString *ALSerializeKeyValuePairSeparator;
         if ( [adViewPosition isEqual: @"top_center"] || [adViewPosition isEqual: @"bottom_center"] )
         {
             // Non AdMob banners will still be of 50/90 points tall. Set the auto sizing mask such that the inner ad view is pinned to the bottom or top according to the ad view position.
-            if ( isAdaptiveBannerEnabled )
+            if ( !isAdaptiveBannerDisabled )
             {
                 adView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
                 
@@ -1421,7 +1428,7 @@ static NSString *ALSerializeKeyValuePairSeparator;
                 self.verticalAdViewFormats[adUnitIdentifier] = adFormat;
                 
                 // If adaptive - make top flexible since we anchor with the bottom of the banner at the edge of the screen
-                if ( isAdaptiveBannerEnabled )
+                if ( !isAdaptiveBannerDisabled )
                 {
                     adView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
                 }
@@ -1461,9 +1468,9 @@ static NSString *ALSerializeKeyValuePairSeparator;
             }
         }
         
-        if ( isRotationOverridden )
+        if ( isCrossPromoRotationOverridden )
         {
-            adView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, DEGREES_TO_RADIANS(self.adViewRotations[adUnitIdentifier].floatValue));
+            adView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, DEGREES_TO_RADIANS(self.crossPromoAdViewRotations[adUnitIdentifier].floatValue));
         }
         
         self.adViewConstraints[adUnitIdentifier] = constraints;
