@@ -90,7 +90,7 @@ public class TimeLineMgr : MonoBehaviour
     float _dirDuration = 0;
     WinState  _winState;
 
-    const float MAX_WAIT_TIME = 15f;
+    const float MAX_WAIT_TIME = 20f;
     IEnumerator Anim_Enter()
     {
         print("anim enter");

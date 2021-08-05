@@ -241,7 +241,7 @@ public class InitMgr : MonoBehaviour
             return;
         }
 
-        curLevelIndex++;
+        //curLevelIndex++;
         DisableAllUI();
         CallPlay();
     }
@@ -272,7 +272,7 @@ public class InitMgr : MonoBehaviour
 
 
 
-    public int MAX_LEVEL_INDEX = 6;
+    public const int MAX_LEVEL_INDEX = 6;
     public const string UNLOCK_PREF = "UNLOCK";
     public Text levelText;
     public Transform linesPanel;
