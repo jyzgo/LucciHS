@@ -18,12 +18,12 @@ EditorBuildSettings:
     path: Assets/xShifter/Scenes/Level_04_reward.unity
     guid: 84285378b34814572bdef5d2f8349c7c
   - enabled: 1
+    path: Assets/xShifter/Scenes/Level_05_reward.unity
+    guid: 60acb969f33334cd59303aa9089089fd
+  - enabled: 1
     path: Assets/xShifter/Scenes/Level_02.unity
     guid: 043eeef08eaac42b8b191570302a08b0
   - enabled: 1
-    path: Assets/xShifter/Scenes/Level_05.unity
-    guid: 60acb969f33334cd59303aa9089089fd
-  - enabled: 1
-    path: Assets/xShifter/Scenes/Level_06.unity
-    guid: 622d81aadd469405baf9238ecf5cc9c5
+    path: Assets/xShifter/Scenes/Level_06_reward.unity
+    guid: a32a6b48bfb094a50adfd2c907ff1e8f
   m_configObjects: {}
