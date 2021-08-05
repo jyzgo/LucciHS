@@ -8,6 +8,6 @@ public class InitStarter : MonoBehaviour
     {
         InitMgr.current.InitCall();
         int curLevl = InitMgr.current.GetCurrentLevelIndex();
-        ClearSceneData.LoadLevelByIndex(curLevl);
+        InitMgr.current.LoadLevel(curLevl);
     }
 }
