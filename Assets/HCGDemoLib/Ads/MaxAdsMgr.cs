@@ -33,7 +33,7 @@ public class MaxAdsMgr :MonoBehaviour
 
     private void LoadInterstitial()
     {
-        AnalyzeMgr.current.OnInterRequest(AdsFrom.Max);
+        AnalyzeMgr.current.OnInterRequest(AdsFrom.Max, interAdsID);
         MaxSdk.LoadInterstitial(interAdsID);
     }
 
@@ -41,7 +41,7 @@ public class MaxAdsMgr :MonoBehaviour
     {
         // Interstitial ad is ready to be shown. MaxSdk.IsInterstitialReady(adUnitId) will now return 'true'
         // Reset retry attempt
-        AnalyzeMgr.current.OnInterLoaded(AdsFrom.Max);
+        AnalyzeMgr.current.OnInterLoaded(AdsFrom.Max, adUnitId);
         interRetray = 0;
     }
 
@@ -55,7 +55,7 @@ public class MaxAdsMgr :MonoBehaviour
         interRetray++;
         double retryDelay = Math.Pow(2, Math.Min(6, interRetray));
 
-        AnalyzeMgr.current.OnInterFailed(AdsFrom.Max,errorCode.ToString());
+        AnalyzeMgr.current.OnInterFailed(AdsFrom.Max,errorCode.ToString(),adUnitId);
         Invoke("LoadInterstitial", (float)retryDelay);
     }
 
@@ -63,14 +63,14 @@ public class MaxAdsMgr :MonoBehaviour
     {
         var errorCode = err.Message;
         // Interstitial ad failed to display. We recommend loading the next ad
-        AnalyzeMgr.current.OnInterFailedShow(AdsFrom.Max, errorCode.ToString());
+        AnalyzeMgr.current.OnInterFailedShow(AdsFrom.Max, errorCode.ToString(),adUnitId);
         LoadInterstitial();
     }
 
     private void OnInterstitialDismissedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
     {
         // Interstitial ad is hidden. Pre-load the next ad
-        AnalyzeMgr.current.OnInterClosed(AdsFrom.Max);
+        AnalyzeMgr.current.OnInterClosed(AdsFrom.Max,adUnitId);
         LoadInterstitial();
     }
     public void ShowInter()
@@ -78,7 +78,7 @@ public class MaxAdsMgr :MonoBehaviour
         print("ShowInter");
         if (MaxSdk.IsInterstitialReady(interAdsID))
         {
-            AnalyzeMgr.current.OnInterShowed(AdsFrom.Max);
+            AnalyzeMgr.current.OnInterShowed(AdsFrom.Max,interAdsID);
             MaxSdk.ShowInterstitial(interAdsID);
         }
     }

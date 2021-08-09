@@ -36,27 +36,9 @@ public class AnalyzeMgr : MonoBehaviour
     const string CHANNEL_ID = "china_test";
 #endif
 
-    static string groupId = "";
-    const string GROUP_KEY = "group_key";
-    const string GROUP_A = "group_a";
-    const string GROUP_B = "group_b";
-    
+
     void Awake()
     {
-        groupId = PlayerPrefs.GetString(GROUP_KEY, "");
-        if(groupId.Equals(""))
-        {
-            int r = UnityEngine.Random.Range(0, 1000);
-            if (r % 2 == 0)
-            {
-                groupId = GROUP_A;
-            }
-            else
-            {
-                groupId = GROUP_B;
-            }
-            PlayerPrefs.SetString(GROUP_KEY, groupId);
-        }
         _IPAddress = GetLocalIPAddress();
         _deviceUid = SystemInfo.deviceUniqueIdentifier;
         _gameVersion = Application.version;
@@ -78,12 +60,13 @@ public class AnalyzeMgr : MonoBehaviour
         current = this;
     }
 
-
-    public void OnGetExtraCoinTaped()
+    public const string ON_AV_PURCHASED = "on_avatar_purchased";
+    internal void onSkinPurchased(string bodyName)
     {
-        var dict = GetAutoAddKey(TAP_GET_EXTRA_BTN);
-        ThinkingAnalyticsAPI.Track(TAP_GET_EXTRA_BTN, dict);
-        SendEvent(TAP_GET_EXTRA_BTN);
+        var dict = GetAutoAddKey(ON_AV_PURCHASED);
+        dict.Add("avatarName", bodyName);
+        ThinkingAnalyticsAPI.Track(ON_AV_PURCHASED, dict);
+        SendEvent(ON_AV_PURCHASED);
     }
 
     static string _IPAddress = "";
@@ -96,12 +79,10 @@ public class AnalyzeMgr : MonoBehaviour
 #if UNITY_EDITOR
         //return;
 #endif
-        //Umeng.GA.StartWithAppKeyAndChannelId(APP_KEY, CHANNEL_ID);
         //GA.ProfileSignIn(_deviceUid);
         //ThinkingAnalyticsAPI.EnableTracking(false);
         AdjustLiveOn.current.InitAdjust();
         OnInstall();
-        OnGameStart();
     }
 
     const string WHICH_LEVEL_LOSE = "which_level_lose";
@@ -115,6 +96,16 @@ public class AnalyzeMgr : MonoBehaviour
         ThinkingAnalyticsAPI.Track(ON_AVARTAT_PUCHASED, dict);
         SendEvent(ON_AVARTAT_PUCHASED);
     }
+
+    const string ON_TIMELIME_PLAYED = "on_timeline_played";
+    public void onTimeLinePlayed(string s)
+    {
+        var dict = GetAutoAddKey(ON_TIMELIME_PLAYED);
+        dict.Add("timeline_name", s);
+        ThinkingAnalyticsAPI.Track(ON_TIMELIME_PLAYED, dict);
+        SendEvent(ON_TIMELIME_PLAYED);
+    }
+
 
     const string LEVEL_LOSE = "level_lose";
     const string LEVEL_WIN = "level_win";
@@ -156,10 +147,9 @@ public class AnalyzeMgr : MonoBehaviour
     const string IOS_KEY = "ios";
     #endregion
 
-    const string TAP_GET_EXTRA_BTN = "get_extra_btn_taped";
 
     const string INSTALL_KEY = "install";
-    public  static void OnInstall()
+    public static void OnInstall()
     {
 #if UNITY_EDITOR
         return;
@@ -179,7 +169,7 @@ public class AnalyzeMgr : MonoBehaviour
 
 
     const string level_Box_opened = "Level_box_open";
-    internal void OnLevelBoxOpened(string itemId, int itemValue,int count)
+    internal void OnLevelBoxOpened(string itemId, int itemValue, int count)
     {
         var dict = GetAutoAddKey(level_Box_opened);
         dict.Add("itemID", itemId);
@@ -193,7 +183,7 @@ public class AnalyzeMgr : MonoBehaviour
     public void SpinClick()
     {
         var dict = GetAutoAddKey(SPIN_CLICK);
-       
+
         ThinkingAnalyticsAPI.Track(SPIN_CLICK, dict);
     }
 
@@ -224,17 +214,17 @@ public class AnalyzeMgr : MonoBehaviour
     }
 
     const string TRY_ITEM_VIA_REWARD = "try_get_item_via_reward";
-    public void OnTryItemViaReward(string itemID, string itemValue,string seqTime)
+    public void OnTryItemViaReward(string itemID, string itemValue, string seqTime)
     {
         var dict = GetAutoAddKey(TRY_ITEM_VIA_REWARD);
         dict.Add("itemID", itemID);
-        dict.Add("itemValue",itemValue);
-        dict.Add("seqTime",seqTime);
+        dict.Add("itemValue", itemValue);
+        dict.Add("seqTime", seqTime);
         ThinkingAnalyticsAPI.Track(TRY_ITEM_VIA_REWARD, dict);
     }
 
     const string GOT_ITEM_VIA_REWARD = "got_item_via_reward";
-    public void OnGotItemViaReward(string itemID,string itemValue,string seqTime)
+    public void OnGotItemViaReward(string itemID, string itemValue, string seqTime)
     {
         var key = GOT_ITEM_VIA_REWARD;
         var dict = GetAutoAddKey(key);
@@ -246,7 +236,17 @@ public class AnalyzeMgr : MonoBehaviour
     }
 
     const string FAILED_GET_ITEM_VIA_REWARD = "failed_get_item_via_reward";
-    public void OnFailedGetItemViaReward(string itemID, string itemValue,string seqTime)
+
+    const string AVATAR_REWARD_WATCHED = "avatar_reward_watched";
+    internal void onSkinRewardWatched(string bodyName)
+    {
+        var dict = GetAutoAddKey(AVATAR_REWARD_WATCHED);
+        dict.Add("avatarName", bodyName);
+        ThinkingAnalyticsAPI.Track(AVATAR_REWARD_WATCHED, dict);
+        SendEvent(AVATAR_REWARD_WATCHED);
+    }
+
+    public void OnFailedGetItemViaReward(string itemID, string itemValue, string seqTime)
     {
         var key = FAILED_GET_ITEM_VIA_REWARD;
         var dict = GetAutoAddKey(key);
@@ -341,63 +341,70 @@ public class AnalyzeMgr : MonoBehaviour
         SendEvent(LOGOUT_KEY);
     }
 
-    public void OnInterRequest(AdsFrom f)
+    public void OnInterRequest(AdsFrom f, string adID)
     {
         var dict = GetAutoAddKey(INTER_REQUEST);
         var from = f.ToString();
         dict.Add("from", from);
+        dict.Add("adID", adID);
         ThinkingAnalyticsAPI.Track(INTER_REQUEST, dict);
         SendEvent(INTER_REQUEST);
     }
 
-    internal void OnInterLoaded(AdsFrom f)
+    internal void OnInterLoaded(AdsFrom f, string adsId)
     {
         var dict = GetAutoAddKey(INTER_LOADED);
         var from = f.ToString();
         dict.Add("from", from);
+        dict.Add("adsId", adsId);
         ThinkingAnalyticsAPI.Track(INTER_LOADED, dict);
         SendEvent(INTER_LOADED);
     }
 
 
-    public void OnInterShowed(AdsFrom f)
+    public void OnInterShowed(AdsFrom f, string adID)
     {
         var from = f.ToString();
         var dict = GetAutoAddKey(INTER_SHOWED);
         dict.Add("from", from);
         dict.Add("level", InitMgr.current.GetCurrentLevelIndex());
+        dict.Add("timelineName", TimeLineMgr.CurTimelineName);
+        dict.Add("adID", adID);
         ThinkingAnalyticsAPI.Track(INTER_SHOWED, dict);
         SendEvent(INTER_SHOWED, from);
     }
 
-    public void OnInterFailed(AdsFrom f, string error)
+    public void OnInterFailed(AdsFrom f, string error, string adID)
     {
         var from = f.ToString();
         var dict = GetAutoAddKey(INTER_FAILDED);
         dict.Add("from", from);
         dict.Add("adsError", error);
         dict.Add("level", InitMgr.current.GetCurrentLevelIndex());
+        dict.Add("adID", adID);
         ThinkingAnalyticsAPI.Track(INTER_FAILDED, dict);
         SendEvent(INTER_FAILDED, error);
     }
 
-    public void OnInterFailedShow(AdsFrom f, string error)
+    public void OnInterFailedShow(AdsFrom f, string error, string adID)
     {
         var from = f.ToString();
         var dict = GetAutoAddKey(INTER_FAILDED_SHOW);
         dict.Add("from", from);
         dict.Add("adsError", error);
         dict.Add("level", InitMgr.current.GetCurrentLevelIndex());
+        dict.Add("adID", adID);
         ThinkingAnalyticsAPI.Track(INTER_FAILDED_SHOW, dict);
         SendEvent(INTER_FAILDED_SHOW, error);
     }
 
     const string INTER_CLOSED = "inter_closed";
-    public void OnInterClosed(AdsFrom f)
+    public void OnInterClosed(AdsFrom f, string adID)
     {
         var from = f.ToString();
         var dict = GetAutoAddKey(INTER_CLOSED);
         dict.Add("from", from);
+        dict.Add("adID", adID);
         ThinkingAnalyticsAPI.Track(INTER_CLOSED, dict);
         SendEvent(INTER_CLOSED);
 
@@ -536,8 +543,8 @@ public class AnalyzeMgr : MonoBehaviour
     }
 
     public void OnLevelLose(int level, string btnName)
-    { 
-        print("lose " + level);
+    {
+        //print("lose " + level);
         var dict = GetAutoAddKey(LEVEL_LOSE);
         dict.Add("level", level);
         dict.Add("btnName", btnName);
@@ -547,7 +554,6 @@ public class AnalyzeMgr : MonoBehaviour
 
     public void OnLevelWon(int level, int gameTime)
     {
-        print("won" + level);
         SendEvent(LEVEL_WIN, _deviceUid + "___" + level.ToString() + "___" + gameTime.ToString());
         var thinkDict = GetAutoAddKey(LEVEL_WIN);
         thinkDict.Add("level", level);
@@ -653,9 +659,9 @@ public class AnalyzeMgr : MonoBehaviour
             curLv = InitMgr.current.GetCurrentLevelIndex();
         }
         return new Dictionary<string, object>() {
-            { "account_id",_deviceUid},
-            { "distinct_id",_deviceUid},
-            { "event_time",DateTime.UtcNow},
+            { "#account_id",_deviceUid},
+            { "#distinct_id",_deviceUid},
+            { "#event_time",DateTime.UtcNow},
             {"deviceid",_deviceUid },
             {"ip_address",_IPAddress},
             {"device",_deviceType},
@@ -667,7 +673,6 @@ public class AnalyzeMgr : MonoBehaviour
             },
             {"playerSpinBase",playerHasSpin },
             {"playerRefillBase",playerHasRefill },
-            {GROUP_KEY,groupId}
 
         };
     }
@@ -733,7 +738,7 @@ public class AnalyzeMgr : MonoBehaviour
         SendEvent(GET_ITEM_BY_COLLECTION, SystemInfo.deviceUniqueIdentifier);
     }
 
-    const string  GET_REFILL_BTN = "GET_REFILL_BTN";
+    const string GET_REFILL_BTN = "GET_REFILL_BTN";
     internal void OnGetRefillBtnTapped()
     {
         var shopDict = GetAutoAddKey(GET_REFILL_BTN);
@@ -769,13 +774,5 @@ public class AnalyzeMgr : MonoBehaviour
 
     const string FREE_SPIN = "free_spin";
 
-    public string GOLD_SPIN = "gold_spin";
-
-    public string REWARD_SPIN = "reward_spin";
-
-    public static bool IsGroupA()
-    {
-        return groupId.Equals(GROUP_A);
-    }
 
 }
