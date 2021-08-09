@@ -4,26 +4,5 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-    path: Assets/HCGDemoLib/InitScene.unity
-    guid: 041cf14934538634b8b54a88b499a9ef
-  - enabled: 1
-    path: Assets/xShifter/Scenes/Level_01.unity
-    guid: 8ca94e3fb4c4b4583b03b7adfe1029c2
-  - enabled: 1
-    path: Assets/xShifter/Scenes/Level_03_reward.unity
-    guid: 363b750a863ce4fb3803851e3516c22f
-  - enabled: 1
-    path: Assets/xShifter/Scenes/Level_04_reward.unity
-    guid: 84285378b34814572bdef5d2f8349c7c
-  - enabled: 1
-    path: Assets/xShifter/Scenes/Level_05_reward.unity
-    guid: 60acb969f33334cd59303aa9089089fd
-  - enabled: 1
-    path: Assets/xShifter/Scenes/Level_02.unity
-    guid: 043eeef08eaac42b8b191570302a08b0
-  - enabled: 1
-    path: Assets/xShifter/Scenes/Level_06_reward.unity
-    guid: a32a6b48bfb094a50adfd2c907ff1e8f
+  m_Scenes: []
   m_configObjects: {}
