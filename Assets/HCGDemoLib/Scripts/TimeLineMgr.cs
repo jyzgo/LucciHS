@@ -89,6 +89,7 @@ public class TimeLineMgr : MonoBehaviour
             _curPlayData = data;
             timelineIndex++;
             fsm.ChangeState(TimelineGameStates.Anim);
+            AnalyzeMgr.current.onTimeLinePlayed(s);
 
         }
     }
@@ -96,7 +97,7 @@ public class TimeLineMgr : MonoBehaviour
     float _dirDuration = 0;
     WinState  _winState;
 
-    const float MAX_WAIT_TIME = 20f;
+    const float MAX_WAIT_TIME = 10f;
     IEnumerator Anim_Enter()
     {
         print("anim enter");
