@@ -51,6 +51,10 @@ public class TimeLineMgr : MonoBehaviour
         }
         timelineIndex = 0;
         StartGameTime = Time.time;
+    }
+
+    private void Start()
+    {
         AnalyzeMgr.current.OnLevelStart(InitMgr.current.GetCurrentLevelIndex());
     }
 
@@ -72,6 +76,7 @@ public class TimeLineMgr : MonoBehaviour
             return;
         }
 
+        //AnalyzeMgr.current.
         print("play timeline " + s);
         TimeLineData data;
         if(_playDir.TryGetValue(s,out data))
@@ -79,10 +84,12 @@ public class TimeLineMgr : MonoBehaviour
             _winState= data.winState;
             var dir = data.director;
             dir.Play();
+            CurTimelineName = s;
             _dirDuration = (float)dir.duration;
             _curPlayData = data;
             timelineIndex++;
             fsm.ChangeState(TimelineGameStates.Anim);
+            AnalyzeMgr.current.onTimeLinePlayed(s);
 
         }
     }
@@ -90,7 +97,7 @@ public class TimeLineMgr : MonoBehaviour
     float _dirDuration = 0;
     WinState  _winState;
 
-    const float MAX_WAIT_TIME = 20f;
+    const float MAX_WAIT_TIME = 10f;
     IEnumerator Anim_Enter()
     {
         print("anim enter");
@@ -146,6 +153,8 @@ public class TimeLineMgr : MonoBehaviour
     }
 
     public static float StartGameTime = 0f;
+
+    public static string CurTimelineName { get; internal set; }
 
     public void BackToLastTimeLine()
     {

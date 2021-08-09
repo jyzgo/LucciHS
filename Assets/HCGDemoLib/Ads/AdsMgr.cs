@@ -120,56 +120,12 @@ public class AdsMgr :BaseDelayMono
         DelayCallFunc(INTER, 5f, RequestAdmobInter);
     }
 
-    void DelayRequestLionInter()
-    {
-        DelayCallFunc(INTER, 5f, RequestLionInter);
-    }
-
-
-    //ShowAdRequest _showLionInterRequest;
-
-
-    void RequestLionInter()
-    {
-        if (Application.internetReachability == NetworkReachability.NotReachable)
-        {
-            return;
-        }
-
-        if (AnalyzeMgr.current != null)
-        {
-            AnalyzeMgr.current.OnInterRequest(AdsFrom.Lion);
-        }
-
-        // Create callbacks for interstitial ads
-        //_showLionInterRequest = new ShowAdRequest();
-        //_showLionInterRequest.OnDisplayed += OnLionInterShow;// adUnitID => LionDebug.Log("Displayed Interstitial Ad :: Ad Unit ID = " + adUnitID);
-        //_showLionInterRequest.OnClicked += OnLionInterClicked;// adUnitID => LionDebug.Log("Clicked Interstitial Ad :: Ad Unit ID = " + adUnitID);
-        //_showLionInterRequest.OnHidden += OnLionInterClosed;////adUnitID => LionDebug.Log("Closed Interstitial Ad :: Ad Unit ID = " + adUnitID);
-        //_showLionInterRequest.OnFailedToDisplay += OnLionInterFailed; //(adUnitID, error) => LionDebug.LogError("Failed To Display Interstitial Video :: Error = " + error + " :: Ad Unit ID = " + adUnitID);
-    }
-
-    private void OnLionInterFailed(string arg1, int arg2)
-    {
-        AnalyzeMgr.current.OnInterFailed(AdsFrom.Lion, arg1+ "___" + arg2.ToString());
-        DelayRequestAdmobInterstitial();
-    }
-
-    private void OnLionInterClosed(string obj)
-    {
-        AnalyzeMgr.current.OnInterClosed(AdsFrom.Lion);
-        RequestLionInter();
-    }
-
+ 
     private void OnLionInterClicked(string obj)
     {
         AnalyzeMgr.current.OnInterClicked(AdsFrom.Lion);
     }
 
-    private void OnLionInterShow(string obj)
-    {
-        AnalyzeMgr.current.OnInterShowed(AdsFrom.Lion);
-    }
 
     void RequestAdmobInter()
     {
@@ -180,7 +136,7 @@ public class AdsMgr :BaseDelayMono
 
         if (AnalyzeMgr.current != null)
         {
-            AnalyzeMgr.current.OnInterRequest(AdsFrom.Admob);
+            AnalyzeMgr.current.OnInterRequest(AdsFrom.Admob,ADMOB_AND_INTER_ID);
         }
 
 //#if UNITY_ANDROID
@@ -222,14 +178,14 @@ public class AdsMgr :BaseDelayMono
 
     private void HandleOnAdClosed(object sender, EventArgs e)
     {
-        AnalyzeMgr.current.OnInterClosed(AdsFrom.Admob);
+        AnalyzeMgr.current.OnInterClosed(AdsFrom.Admob,ADMOB_AND_INTER_ID);
         RequestAdmobInter();
 
     }
 
     private void HandleOnInterAdOpened(object sender, EventArgs e)
     {
-        AnalyzeMgr.current.OnInterShowed(AdsFrom.Admob);
+        AnalyzeMgr.current.OnInterShowed(AdsFrom.Admob,ADMOB_AND_INTER_ID);
     }
 
     //private void HandleOnAdFailedToLoad(object sender, AdFailedToLoadEventArgs e)

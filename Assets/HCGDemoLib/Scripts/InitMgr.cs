@@ -400,6 +400,7 @@ public class InitMgr : MonoBehaviour
         buyEmojiRoot.SetActive(true);
         AdsMgr.current.ShowInter();
         sentence.color = Color.green;
+        print("cur level index " + curLevelIndex);
         curLevelIndex++;
         if(curLevelIndex >= curPlayerMaxIndex)
         {
@@ -466,6 +467,9 @@ public class InitMgr : MonoBehaviour
     }
     public void ToWin()
     {
+        AnalyzeMgr.current.OnLevelWon(curLevelIndex, (int)(Time.time-TimeLineMgr.StartGameTime));
+        AdsMgr.current.ShowInter();
+
         curLevelIndex++;
         if (curLevelIndex >= curPlayerMaxIndex)
         {
@@ -476,8 +480,6 @@ public class InitMgr : MonoBehaviour
         PlayerPrefs.SetInt(CUR_LEVEL_KEY, curLevelIndex);
         PlayerPrefs.SetInt(CUR_MAX_LEVEL_KEY, curPlayerMaxIndex);
 
-        AnalyzeMgr.current.OnLevelWon(curLevelIndex, (int)(Time.time-TimeLineMgr.StartGameTime));
-        AdsMgr.current.ShowInter();
         DisableAllUI();
         winRoot.SetActive(true);
     }

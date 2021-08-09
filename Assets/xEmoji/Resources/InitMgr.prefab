@@ -799,7 +799,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buyEmojiRoot: {fileID: 0}
-  MAX_LEVEL_INDEX: 6
   levelText: {fileID: 0}
   linesPanel: {fileID: 0}
   emojiPanel: {fileID: 0}
