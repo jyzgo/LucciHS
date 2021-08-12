@@ -108,7 +108,6 @@ public class AnalyzeMgr : MonoBehaviour
 
 
     const string LEVEL_LOSE = "level_lose";
-    const string LEVEL_WIN = "level_win";
     const string LEVEL_START = "level_start";
     const string GAME_START = "game_start";
 
@@ -552,13 +551,13 @@ public class AnalyzeMgr : MonoBehaviour
         ThinkingAnalyticsAPI.Track(LEVEL_LOSE, dict);
     }
 
+    const string LEVEL_WIN = "level_win";
     public void OnLevelWon(int level, int gameTime)
     {
-        SendEvent(LEVEL_WIN, _deviceUid + "___" + level.ToString() + "___" + gameTime.ToString());
         var thinkDict = GetAutoAddKey(LEVEL_WIN);
         thinkDict.Add("level", level);
+        thinkDict.Add("level_win", gameTime);
         ThinkingAnalyticsAPI.Track(LEVEL_WIN, thinkDict);
-        ThinkingAnalyticsAPI.UserSet(thinkDict);
     }
 
     public void OnLevelStart(int level)
@@ -679,6 +678,9 @@ public class AnalyzeMgr : MonoBehaviour
 
     static Dictionary<string, object> GetAutoAddKey(string trackKey)
     {
+#if UNITY_EDITOR
+        print("track key " + trackKey);
+#endif
         int openAppTimes = PlayerPrefs.GetInt(trackKey, 0);
         openAppTimes++;
         PlayerPrefs.SetInt(trackKey, openAppTimes);
@@ -725,7 +727,6 @@ public class AnalyzeMgr : MonoBehaviour
     {
         var shopDict = GetAutoAddKey(REFILL_CLICKED);
         ThinkingAnalyticsAPI.Track(REFILL_CLICKED, shopDict);
-        SendEvent(REFILL_CLICKED, SystemInfo.deviceUniqueIdentifier);
     }
 
     const string GET_ITEM_BY_COLLECTION = "GET_ITEM_BY_COLLECTION";

@@ -111,7 +111,7 @@ public class InitMgr : MonoBehaviour
     StateMachine<InitGameState> _fsm;
     private void Start()
     {
-        _fsm = StateMachine<InitGameState>.Initialize(this, InitGameState.Ready);
+        //_fsm = StateMachine<InitGameState>.Initialize(this, InitGameState.Ready);
     }
 
     List<SentenceData> _datas = new List<SentenceData>();
