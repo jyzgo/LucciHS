@@ -1,4 +1,5 @@
 //using Facebook.Unity;
+using GameAnalyticsSDK;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ public enum AdsFrom
 }
 
 
-public class AnalyzeMgr : MonoBehaviour
+public class AnalyzeMgr : MonoBehaviour, IGameAnalyticsATTListener
 {
     public static AnalyzeMgr current;
     const string APP_KEY = "5f9fb55b1c520d30739e2399";
@@ -83,7 +84,39 @@ public class AnalyzeMgr : MonoBehaviour
         //ThinkingAnalyticsAPI.EnableTracking(false);
         AdjustLiveOn.current.InitAdjust();
         OnInstall();
+        GAStart();
     }
+
+
+    void GAStart()
+    {
+        if (Application.platform == RuntimePlatform.IPhonePlayer)
+        {
+            GameAnalytics.RequestTrackingAuthorization(this);
+        }
+        else
+        {
+            GameAnalytics.Initialize();
+        }
+    }
+
+    public void GameAnalyticsATTListenerNotDetermined()
+    {
+        GameAnalytics.Initialize();
+    }
+    public void GameAnalyticsATTListenerRestricted()
+    {
+        GameAnalytics.Initialize();
+    }
+    public void GameAnalyticsATTListenerDenied()
+    {
+        GameAnalytics.Initialize();
+    }
+    public void GameAnalyticsATTListenerAuthorized()
+    {
+        GameAnalytics.Initialize();
+    }
+
 
     const string WHICH_LEVEL_LOSE = "which_level_lose";
 
