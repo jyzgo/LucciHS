@@ -13870,6 +13870,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8533207025306133301, guid: 530a6c0f8cc76416bb0abb14f233a4b7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 530a6c0f8cc76416bb0abb14f233a4b7, type: 3}
 --- !u!95 &1010370896 stripped
@@ -35285,6 +35289,7 @@ MonoBehaviour:
   lastPressTime: 0
   GlowPosOffest: {x: 0, y: 0, z: 0}
   GlowScale: {x: 1, y: 1, z: 1}
+  msg: 
 --- !u!114 &1960160117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36100,7 +36105,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2057483380
 RectTransform:
   m_ObjectHideFlags: 0
